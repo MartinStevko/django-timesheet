@@ -87,6 +87,10 @@ class TimesheetViews(TestCase):
 
         response = self.client.get(reverse('file_list'))
         self.assertEqual(response.context['object_list'].count(), 3)
+
+        # Search list
+        response = self.client.get(reverse('file_list'), data={'reference': 'b'})
+        self.assertEqual(response.context['object_list'].count(), 1)
                 
     def test_home_page(self):
 

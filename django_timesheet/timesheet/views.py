@@ -7,6 +7,13 @@ class FileListView(generic.ListView):
 
     model = File
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        lookup = self.request.GET.get('reference', None)
+        if lookup:
+            queryset = queryset.filter(reference__icontains=lookup)
+        return queryset
+
 class FileCreateView(generic.CreateView):
 
     model = File
