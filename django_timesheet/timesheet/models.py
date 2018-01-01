@@ -13,6 +13,9 @@ class File(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('file', args=(self.pk,))
 
+    def __str__(self):
+        return self.reference
+
 class Task(models.Model):
 
     file = models.ForeignKey(to=File, verbose_name=_('Akte'), blank=True, null=True)

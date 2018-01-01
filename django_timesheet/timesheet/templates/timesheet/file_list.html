@@ -1,0 +1,7 @@
+<ul>
+    {% for object in object_list %}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.reference }}</a></li>
+    {% empty %}
+    <li>No items found.</li>
+    {% endfor %}
+</ul>
