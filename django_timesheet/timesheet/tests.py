@@ -58,6 +58,7 @@ class TimesheetViews(TestCase):
         response = self.client.get((reverse('start_timer', args=(task.pk,))))
         self.assertEqual(response.status_code, 405)
 
+        # Start timer
         response = self.client.post(reverse('start_timer', args=(task.pk,)))
 
         self.assertRedirects(response, task.get_absolute_url())
@@ -65,3 +66,16 @@ class TimesheetViews(TestCase):
         timer = task.timer
         self.assertTrue(timer.running)
 
+        # Pause timer
+        response = self.client.post(reverse('pause_timer', args=(task.pk,)))
+        self.assertTrue(timer.paused)
+
+        # Resume timer
+        response = self.client.post(reverse('resume_timer', args=(task.pk,)))
+        self.assertTrue(timer.running)
+
+        # Stop timer
+        response = self.client.post(reverse('stop_timer', args=(task.pk,)))
+        timer.refresh_from_db()
+        self.assertTrue(timer.stopped)
+        
