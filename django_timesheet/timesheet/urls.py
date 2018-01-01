@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^file/(?P<pk>\d+)/$', views.FileUpdateView.as_view(), name='file'),
     url(r'^task/create/$', views.TaskCreateView.as_view(), name='create_task'),
     url(r'^task/(?P<pk>\d+)/$', views.TaskUpdateView.as_view(), name='task'),
+    url(r'^task/(?P<pk>\d+)/start_timer/$', views.StartTimer.as_view(), name='start_timer'),
 ]

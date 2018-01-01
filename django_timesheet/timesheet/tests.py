@@ -49,3 +49,19 @@ class TimesheetViews(TestCase):
 
         task = Task.objects.get(description='bar')
         self.assertIsNone(task.file)
+
+    def test_timer_views(self):
+
+        task = Task.objects.create()
+
+        # Get not allowed
+        response = self.client.get((reverse('start_timer', args=(task.pk,))))
+        self.assertEqual(response.status_code, 405)
+
+        response = self.client.post(reverse('start_timer', args=(task.pk,)))
+
+        self.assertRedirects(response, task.get_absolute_url())
+        task.refresh_from_db()
+        timer = task.timer
+        self.assertTrue(timer.running)
+
