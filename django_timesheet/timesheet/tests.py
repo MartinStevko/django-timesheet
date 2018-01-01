@@ -78,4 +78,22 @@ class TimesheetViews(TestCase):
         response = self.client.post(reverse('stop_timer', args=(task.pk,)))
         timer.refresh_from_db()
         self.assertTrue(timer.stopped)
-        
+
+    def test_files_list(self):
+
+        File.objects.create(reference='a123')
+        File.objects.create(reference='b123')
+        File.objects.create(reference='c123')
+
+        response = self.client.get(reverse('file_list'))
+        self.assertEqual(response.context['object_list'].count(), 3)
+                
+    def test_home_page(self):
+
+        pass
+
+        # response = self.client.get('/')
+
+        # There should be a form to create a new task
+
+        # Search tasks and files

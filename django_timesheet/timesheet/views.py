@@ -3,6 +3,9 @@ from django.views import generic
 
 from django_timesheet.timesheet.models import File, Task
 
+class FileListView(generic.ListView):
+
+    model = File
 
 class FileCreateView(generic.CreateView):
 
