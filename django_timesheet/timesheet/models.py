@@ -30,3 +30,8 @@ class Task(models.Model):
         if not self.timer:
             self.timer = Timer.objects.start()
             self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.timer:
+            self.timer = Timer.objects.create()
+        return super().save(*args, **kwargs)

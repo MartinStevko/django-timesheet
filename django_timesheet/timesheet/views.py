@@ -33,34 +33,3 @@ class TaskUpdateView(generic.UpdateView):
 
     model = Task
     fields = ('description',)
-
-class TimerView(generic.DetailView):
-
-    model = Task
-    http_method_names = ['post']
-    
-    def post(self, request, pk):
-        self.task = self.get_object()
-        self.action()
-        return redirect(self.task)
-
-class StartTimer(TimerView):
-
-    def action(self):
-        self.task.start_timer()
-
-class PauseTimer(TimerView):
-
-    def action(self):
-        self.task.timer.pause()
-
-class ResumeTimer(TimerView):
-
-    def action(self):
-        self.task.timer.resume()
-
-class StopTimer(TimerView):
-
-    def action(self):
-        self.task.timer.stop()
-

@@ -6,6 +6,13 @@ from django_timesheet.timesheet.models import File, Task
 
 # Create your tests here.
 
+class TimesheetModelsTest(TestCase):
+
+    def test_task_with_timer(self):
+        task = Task.objects.create()
+        task.timer.start()
+        self.assertEqual(task.timer.status, 'running')
+
 class TimesheetViews(TestCase):
 
     def test_create_file(self):
@@ -53,31 +60,27 @@ class TimesheetViews(TestCase):
     def test_timer_views(self):
 
         task = Task.objects.create()
-
-        # Get not allowed
-        response = self.client.get((reverse('start_timer', args=(task.pk,))))
-        self.assertEqual(response.status_code, 405)
+        timer = task.timer
 
         # Start timer
-        response = self.client.post(reverse('start_timer', args=(task.pk,)))
-
-        self.assertRedirects(response, task.get_absolute_url())
-        task.refresh_from_db()
-        timer = task.timer
-        self.assertTrue(timer.running)
+        response = self.client.post(reverse('start_timer', args=(timer.pk,)))
+        timer.refresh_from_db()
+        self.assertTrue(timer.status, 'running')
 
         # Pause timer
-        response = self.client.post(reverse('pause_timer', args=(task.pk,)))
-        self.assertTrue(timer.paused)
+        response = self.client.post(reverse('pause_timer', args=(timer.pk,)))
+        timer.refresh_from_db()
+        self.assertTrue(timer.status, 'paused')
 
         # Resume timer
-        response = self.client.post(reverse('resume_timer', args=(task.pk,)))
-        self.assertTrue(timer.running)
+        response = self.client.post(reverse('resume_timer', args=(timer.pk,)))
+        timer.refresh_from_db()
+        self.assertTrue(timer.status, 'running')
 
         # Stop timer
-        response = self.client.post(reverse('stop_timer', args=(task.pk,)))
+        response = self.client.post(reverse('stop_timer', args=(timer.pk,)))
         timer.refresh_from_db()
-        self.assertTrue(timer.stopped)
+        self.assertTrue(timer.status, 'stopped')
 
     def test_files_list(self):
 
