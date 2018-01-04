@@ -8,7 +8,7 @@ from django_timer.models import Timer
 
 class File(models.Model):
 
-    reference = models.CharField(_('Aktenzeichen'), max_length=128)
+    reference = models.CharField(_('Aktenzeichen'), max_length=128, unique=True)
 
     def get_absolute_url(self):
         return reverse_lazy('file', args=(self.pk,))

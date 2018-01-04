@@ -1,17 +1,23 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils.timezone import now
+from django.db import IntegrityError
 
 from django_timesheet.timesheet.models import File, Task
 
 # Create your tests here.
 
-class TimesheetModelsTest(TestCase):
+class TimesheetModels(TestCase):
 
     def test_task_with_timer(self):
         task = Task.objects.create()
         task.timer.start()
         self.assertEqual(task.timer.status, 'running')
+
+    def test_file_reference_unique(self):
+        File.objects.create(reference='abc')
+        with self.assertRaises(IntegrityError):
+            File.objects.create(reference='abc')
 
 class TimesheetViews(TestCase):
 
