@@ -28,7 +28,7 @@ class TimesheetForms(TestCase):
     def test_create_task_with_file_reference(self):
         file = File.objects.create(reference='abc')
         
-        # Creates a task for a known file
+        # Creates a task for a known file reference
         form = TaskForm({
             'reference': 'abc',
             'description': 'task description',
@@ -38,7 +38,7 @@ class TimesheetForms(TestCase):
         self.assertEqual(Task.objects.count(), 1)
         self.assertEqual(task.file, file)
 
-        # Creates a task for an unknown file
+        # Creates a task for an unknown file reference
         form = TaskForm({
             'reference': 'abcdef',
             'description': 'task description',
@@ -48,6 +48,17 @@ class TimesheetForms(TestCase):
         self.assertEqual(Task.objects.count(), 2)
         self.assertEqual(File.objects.count(), 2)
         self.assertEqual(task2.file.reference, 'abcdef')
+
+        # Creates no file, if reference is empty
+        form = TaskForm({
+            'reference': '',
+            'description': 'task description',
+        })
+        form.is_valid()
+        task3 = form.save()
+        self.assertEqual(Task.objects.count(), 3)
+        self.assertEqual(File.objects.count(), 2)
+        self.assertIsNone(task3.file)
 
 class TimesheetViews(TestCase):
 
