@@ -1,24 +1,32 @@
+{% extends 'django_timesheet/base.html' %}
 {% load static timer %}
 
+{% block content %}
 <form action="" method="POST">
     {% csrf_token %}
     {{ form }}
     <button type="submit">Save</button>
 </form>
 
+{% if object.pk %}
 <table>
     {% for task in object.task_set.all %}
     <tr>
+        <td>{{ task.date }}</td>
         <td>{{ task.description }}</td>
         <td>{% render_timer task.timer %}</td>
     </tr>
     {% empty %}
     <tr>
-        <td colspan="2">No tasks.</td>
+        <td colspan="3">No tasks.</td>
     </tr>
     {% endfor %}
 </table>
 
 <a href="{% url 'create_task' object.pk %}">Add task</a>
+{% endif %}
+{% endblock %}
 
+{% block scripts %}
 <script src="{% static 'django_timer/js/timer.js' %}"></script>
+{% endblock %}

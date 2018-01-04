@@ -1,7 +1,16 @@
-<ul>
+{% extends 'django_timesheet/base.html' %}
+
+{% block content %}
+<table>
     {% for object in object_list %}
-    <li><a href="{{ object.get_absolute_url }}">{{ object.reference }}</a></li>
+    <tr>
+        <td><a href="{{ object.get_absolute_url }}">{{ object.reference }}</a></td>
+        <td>{{ object.task_set.count }} Aufgaben</td>
+    </tr>
     {% empty %}
-    <li>No items found.</li>
+    <tr>
+        <td colspan="2">No items found.</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
+{% endblock %}
