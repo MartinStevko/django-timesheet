@@ -1,9 +1,12 @@
+
+import datetime
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.utils.timezone import now
 from django.db import IntegrityError
 
 from django_timesheet.timesheet.models import File, Task
+from django_timesheet.timesheet.forms import TaskForm
 
 # Create your tests here.
 
@@ -19,6 +22,33 @@ class TimesheetModels(TestCase):
         with self.assertRaises(IntegrityError):
             File.objects.create(reference='abc')
 
+
+class TimesheetForms(TestCase):
+
+    def test_create_task_with_file_reference(self):
+        file = File.objects.create(reference='abc')
+        
+        # Creates a task for a known file
+        form = TaskForm({
+            'reference': 'abc',
+            'description': 'task description',
+        })
+        form.is_valid()
+        task = form.save()
+        self.assertEqual(Task.objects.count(), 1)
+        self.assertEqual(task.file, file)
+
+        # Creates a task for an unknown file
+        form = TaskForm({
+            'reference': 'abcdef',
+            'description': 'task description',
+        })
+        form.is_valid()
+        task2 = form.save()
+        self.assertEqual(Task.objects.count(), 2)
+        self.assertEqual(File.objects.count(), 2)
+        self.assertEqual(task2.file.reference, 'abcdef')
+
 class TimesheetViews(TestCase):
 
     def test_create_file(self):
@@ -28,7 +58,6 @@ class TimesheetViews(TestCase):
 
         response = self.client.post(reverse('create_file'),
             data={'reference': 'foo'})
-
 
         file = File.objects.first()
         self.assertEqual(file.reference, 'foo')
@@ -51,7 +80,7 @@ class TimesheetViews(TestCase):
 
         task = Task.objects.first()
         self.assertEqual(task.description, 'foo')
-        self.assertEqual(task.date, now().date())
+        self.assertEqual(task.date, datetime.date.today())
         self.assertEqual(Task.objects.count(), 1)
 
         self.assertRedirects(response, task.get_absolute_url())
