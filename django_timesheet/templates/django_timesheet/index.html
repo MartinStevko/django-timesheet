@@ -1,3 +1,7 @@
+{% extends 'django_timesheet/base.html' %}
+{% load timer static %}
+
+{% block content %}
 <h1>Willkommen</h1>
 
 <form action="{% url 'file_list' %}" method="GET">
@@ -6,3 +10,23 @@
 </form>
 
 <a href="{% url 'file_list' %}">Alle Akten</a>
+
+<h2>Offene Aufgaben</h2>
+
+<table>
+    {% for task in object_list %}
+    <tr>
+        <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
+        <td>{{ task.description }}</td>
+        <td>{% render_timer task.timer %}</td>
+    {% empty %}
+    <tr>
+        <td colspan="3">No items found.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'django_timer/js/timer.js' %}"></script>
+{% endblock %}
