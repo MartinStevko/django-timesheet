@@ -153,3 +153,10 @@ class TimesheetViews(TestCase):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'timesheet/index.html')
+
+    def test_create_task_on_home_page(self):
+
+        response = self.client.post(reverse('index'), data={'reference': 'abc', 'description': 'task'})
+        self.assertRedirects(response, reverse('index'))
+        self.assertEqual(File.objects.first().reference, 'abc')
+        self.assertEqual(File.objects.first().task_set.first().description, 'task')
