@@ -97,10 +97,6 @@ class TimesheetViews(TestCase):
                 
     def test_home_page(self):
 
-        pass
-
-        # response = self.client.get('/')
-
-        # There should be a form to create a new task
-
-        # Search tasks and files
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'django_timesheet/index.html')

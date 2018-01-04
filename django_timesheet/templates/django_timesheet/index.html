@@ -1,0 +1,8 @@
+<h1>Willkommen</h1>
+
+<form action="{% url 'file_list' %}" method="GET">
+    <input name="reference" />
+    <button type="submit">Suchen</button>
+</form>
+
+<a href="{% url 'file_list' %}">Alle Akten</a>
