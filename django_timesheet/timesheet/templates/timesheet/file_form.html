@@ -1,3 +1,5 @@
+{% load static timer %}
+
 <form action="" method="POST">
     {% csrf_token %}
     {{ form }}
@@ -8,7 +10,7 @@
     {% for task in object.task_set.all %}
     <tr>
         <td>{{ task.description }}</td>
-        <td>{{ task.timer.duration }}</td>
+        <td>{% render_timer task.timer %}</td>
     </tr>
     {% empty %}
     <tr>
@@ -18,3 +20,5 @@
 </table>
 
 <a href="{% url 'create_task' %}">Add task</a>
+
+<script src="{% static 'django_timer/js/timer.js' %}"></script>
