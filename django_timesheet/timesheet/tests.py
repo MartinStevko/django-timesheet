@@ -57,6 +57,13 @@ class TimesheetViews(TestCase):
         task = Task.objects.get(description='bar')
         self.assertIsNone(task.file)
 
+    def test_create_task_from_file(self):
+
+        file = File.objects.create()
+
+        response = self.client.get(reverse('create_task', args=(file.pk,)))
+        self.assertEqual(response.context['form'].initial['file'], file.pk)
+
     def test_timer_views(self):
 
         task = Task.objects.create()

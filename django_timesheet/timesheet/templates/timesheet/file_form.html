@@ -19,6 +19,6 @@
     {% endfor %}
 </table>
 
-<a href="{% url 'create_task' %}">Add task</a>
+<a href="{% url 'create_task' object.pk %}">Add task</a>
 
 <script src="{% static 'django_timer/js/timer.js' %}"></script>
