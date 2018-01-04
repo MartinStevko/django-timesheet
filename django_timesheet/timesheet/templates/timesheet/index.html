@@ -2,6 +2,14 @@
 {% load timer static %}
 
 {% block content %}
+<h2>Aufgabe hinzufügen</h2>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Speichern</button>
+</form>
+
 <h2>Akten suchen</h2>
 
 <form action="{% url 'file_list' %}" method="GET">
