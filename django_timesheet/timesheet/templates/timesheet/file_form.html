@@ -2,6 +2,8 @@
 {% load static timer %}
 
 {% block content %}
+<h2>Akte</h2>
+
 <form action="" method="POST">
     {% csrf_token %}
     {{ form }}
@@ -9,6 +11,7 @@
 </form>
 
 {% if object.pk %}
+<h3>Aufgaben</h3>
 <table>
     {% for task in object.task_set.all %}
     <tr>
