@@ -22,7 +22,7 @@ class TimesheetModels(TestCase):
         with self.assertRaises(IntegrityError):
             File.objects.create(reference='abc')
 
-class TimesheetForms(TestCase):
+class TaskFormTest(TestCase):
 
     def test_create_task_with_known_file_reference(self):
         file = File.objects.create(reference='abc')
