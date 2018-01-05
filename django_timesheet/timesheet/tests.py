@@ -177,3 +177,32 @@ class TimesheetViews(TestCase):
         # A single hit redirects to the file itself 
         response = self.client.get(reverse('file_list'), data={'reference': 'a'})
         self.assertRedirects(response, File.objects.first().get_absolute_url())
+
+    def test_task_archive_index(self):
+
+        Task.objects.create()
+        Task.objects.create()
+        Task.objects.create()
+
+        Task.objects.filter(pk=1).update(date=datetime.date(2016,1,1))
+        Task.objects.filter(pk=2).update(date=datetime.date(2017,1,1))
+        Task.objects.filter(pk=3).update(date=datetime.date(2018,1,1))
+
+        response = self.client.get(reverse('task_archive'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['date_list'].count(), 3)
+        self.assertEqual(response.context['latest'].count(), 3)
+
+    def test_year_archive(self):
+        Task.objects.create()
+        Task.objects.create()
+        Task.objects.create()
+
+        Task.objects.filter(pk=1).update(date=datetime.date(2017,1,1))
+        Task.objects.filter(pk=2).update(date=datetime.date(2017,2,1))
+        Task.objects.filter(pk=3).update(date=datetime.date(2017,3,1))
+
+        response = self.client.get(reverse('task_archive', args=(2017,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['date_list'].count(), 3)
+        self.assertEqual(response.context['object_list'].count(), 3)
