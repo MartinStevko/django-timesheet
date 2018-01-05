@@ -115,9 +115,17 @@ class TimesheetViews(TestCase):
     def test_create_task_from_file(self):
 
         file = File.objects.create()
-
         response = self.client.get(reverse('create_task', args=(file.pk,)))
         self.assertEqual(response.context['form'].initial['file'], file.pk)
+
+    def test_update_task(self):
+        task = Task.objects.create(description='a')
+        response = self.client.get(reverse('task', args=(task.pk,)))
+        self.assertTemplateUsed('timesheet/task_form.html')        
+        response = self.client.post(reverse('task', args=(task.pk,)), data={'description': 'b'})
+        self.assertRedirects(response, task.get_absolute_url())
+        task.refresh_from_db()
+        self.assertEqual(task.description, 'b')
 
     def test_timer_views(self):
 
