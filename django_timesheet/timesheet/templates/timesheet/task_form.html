@@ -1,5 +1,9 @@
+{% extends 'django_timesheet/base.html' %}
+
+{% block content %}
 <form action="" method="POST">
     {% csrf_token %}
     {{ form }}
     <button type="submit">Save</button>
 </form>
+{% endblock %}

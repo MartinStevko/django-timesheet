@@ -26,7 +26,7 @@
     <tr>
         <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
         <td>{{ task.date }}</td>
-        <td>{{ task.description }}</td>
+        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
         <td>{% render_timer task.timer %}</td>
     {% empty %}
     <tr>

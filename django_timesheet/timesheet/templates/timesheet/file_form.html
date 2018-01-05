@@ -13,7 +13,7 @@
     {% for task in object.task_set.all %}
     <tr>
         <td>{{ task.date }}</td>
-        <td>{{ task.description }}</td>
+        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
         <td>{% render_timer task.timer %}</td>
     </tr>
     {% empty %}
