@@ -82,8 +82,8 @@ class TaskForm(Form):
 class FileSearchForm(Form):
 
     reference = DataListCharField(
-        required=True, 
+        required=False, 
         to_field_name='reference',
         queryset=File.objects.all(),
-        label=File._meta.get_field('reference').verbose_name
+        label='Suchen'
     )
