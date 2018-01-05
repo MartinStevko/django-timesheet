@@ -51,6 +51,10 @@ class FileUpdateView(generic.UpdateView):
     model = File
     fields = ('reference',)
 
+class TaskListView(generic.ListView):
+
+    model = Task
+
 class TaskCreateView(generic.CreateView):
 
     model = Task
