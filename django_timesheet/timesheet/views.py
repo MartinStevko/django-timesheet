@@ -34,11 +34,6 @@ class FileListView(generic.ListView):
             queryset = queryset.filter(reference__icontains=lookup)
         return queryset
 
-class FileCreateView(generic.CreateView):
-
-    model = File
-    fields = ('reference',)
-
 class FileUpdateView(generic.UpdateView):
 
     model = File

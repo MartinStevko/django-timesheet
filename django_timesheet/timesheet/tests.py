@@ -90,20 +90,19 @@ class TimesheetForms(TestCase):
 
 class TimesheetViews(TestCase):
 
-    def test_create_file(self):
+    def test_home_page(self):
 
-        response = self.client.get(reverse('create_file'))
+        response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'timesheet/index.html')
 
-        response = self.client.post(reverse('create_file'),
-            data={'reference': 'foo'})
+    def test_create_file_and_task_on_home_page(self):
 
-        file = File.objects.first()
-        self.assertEqual(file.reference, 'foo')
-        self.assertEqual(File.objects.count(), 1)
-
-        self.assertRedirects(response, file.get_absolute_url())
-
+        response = self.client.post(reverse('index'), data={'reference': 'abc', 'description': 'task'})
+        self.assertRedirects(response, reverse('index'))
+        self.assertEqual(File.objects.first().reference, 'abc')
+        self.assertEqual(File.objects.first().task_set.first().description, 'task')
+        
     def test_create_task_from_file(self):
 
         file = File.objects.create()
@@ -149,15 +148,3 @@ class TimesheetViews(TestCase):
         response = self.client.get(reverse('file_list'), data={'reference': 'b'})
         self.assertEqual(response.context['object_list'].count(), 1)
                 
-    def test_home_page(self):
-
-        response = self.client.get(reverse('index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'timesheet/index.html')
-
-    def test_create_task_on_home_page(self):
-
-        response = self.client.post(reverse('index'), data={'reference': 'abc', 'description': 'task'})
-        self.assertRedirects(response, reverse('index'))
-        self.assertEqual(File.objects.first().reference, 'abc')
-        self.assertEqual(File.objects.first().task_set.first().description, 'task')
