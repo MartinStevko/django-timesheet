@@ -1,5 +1,5 @@
 
-from django.forms import ModelForm, ModelChoiceField, Select
+from django.forms import Form, ModelChoiceField, Select, ModelForm
 from django.core import validators
 
 from django_timesheet.timesheet.models import Task, File
@@ -35,17 +35,14 @@ class FileReferenceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.reference
 
-class TaskForm(ModelForm):
+class TaskForm(Form):
 
     field_order = ['reference', 'description']
     reference = FileReferenceField(required=False, queryset=File.objects.all())
-
-    class Meta:
-        model = Task
-        fields = ['description']
+    description = Task._meta.get_field('description').formfield()
 
     def save(self):
-        task = super().save(commit=False)
+        task = Task(description=self.cleaned_data['description'])
         if self.cleaned_data['reference']:
             file, created = File.objects.get_or_create(reference=self.cleaned_data['reference'])
             task.file = file
