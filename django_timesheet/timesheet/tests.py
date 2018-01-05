@@ -205,4 +205,17 @@ class TimesheetViews(TestCase):
         response = self.client.get(reverse('task_archive', args=(2017,)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['date_list'].count(), 3)
-        self.assertEqual(response.context['object_list'].count(), 3)
+
+    def test_month_archive(self):
+
+        t1=Task.objects.create()
+        t2=Task.objects.create()
+        t3=Task.objects.create()
+
+        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
+        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,3,1))
+        Task.objects.filter(pk=t3.pk).update(date=datetime.date(2017,3,1))
+
+        response = self.client.get(reverse('task_archive', args=(2017, 'Mar')))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['object_list'].count(), 2)
