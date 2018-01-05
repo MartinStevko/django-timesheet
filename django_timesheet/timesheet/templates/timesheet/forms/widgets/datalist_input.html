@@ -1,4 +1,4 @@
-{% include "django/forms/widgets/text.html" %}
+<input type="{{ widget.type }}" name="{{ widget.name }}" list="{{ widget.name }}_datalist"{% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %} />
 <datalist id="{{ widget.name }}_datalist">
     {% for value, name in widget.datalist %}
     <option value="{{value}}">{{name}}</option>

@@ -89,6 +89,8 @@ class TaskFormTest(TestCase):
         html = '{}'.format(form['reference'])
         self.assertIn('input', html)
         self.assertIn('datalist', html)
+        self.assertIn('id="reference_datalist"', html)
+        self.assertIn('list="reference_datalist"', html)
         self.assertIn('<option value="foo">', html)
 
     def test_initial_reference(self):
