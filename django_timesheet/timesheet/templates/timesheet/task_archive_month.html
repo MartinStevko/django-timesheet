@@ -1,0 +1,16 @@
+{% extends 'django_timesheet/base.html' %}
+{% load timer %}
+
+{% block content %}
+<h2>Aufgaben {{ month | date:"F Y" }}</h2>
+<table>
+    {% for task in object_list %}
+    <tr>
+        <td>{% if task.file %}<a href="{{ task.file.get_absolute_url }}">{{ task.file }}</a>{% else %}*{% endif %}</td>
+        <td>{{ task.date }}</td>
+        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
+        <td>{{ task.timer.duration | hhmmss }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

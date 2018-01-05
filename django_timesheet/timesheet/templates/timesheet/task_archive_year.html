@@ -4,7 +4,9 @@
 <h2>Aufgaben {{ year.year }}</h2>
 <table>
     {% for date in date_list %}
-    <tr><td><a href="{% url 'task_archive' date.year date.month %}">{{ date.month }}</a></td></tr>
+    {% with month=date|date:"b" %}
+    <tr><td><a href="{% url 'task_archive' date.year month %}">{{ date | date:"F" }}</a></td></tr>
+    {% endwith %}
     {% endfor %}
 </table>
 {% endblock %}
