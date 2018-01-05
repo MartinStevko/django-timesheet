@@ -1,5 +1,5 @@
 
-from django.forms import Form, CharField, TextInput, ChoiceField, ModelChoiceField
+from django.forms import Form, CharField, TextInput, ChoiceField
 from django.core import validators
 
 from django_timesheet.timesheet.models import Task, File
@@ -21,14 +21,15 @@ class DataListIterator(object):
 
     def __iter__(self):
         for obj in self.queryset.all().iterator():
-            yield (obj.reference, obj.reference)
+            yield (self.field.prepare_value(obj), self.field.label_from_instance(obj))
 
-class FileReferenceField(CharField):
+class DataListCharField(CharField):
 
     widget = DatalistInput
     iterator = DataListIterator
 
-    def __init__(self, queryset, *args, **kwargs):
+    def __init__(self, queryset, to_field_name=None, *args, **kwargs):
+        self.to_field_name = to_field_name
         self.queryset = queryset
         return super().__init__(*args, **kwargs)
 
@@ -46,12 +47,23 @@ class FileReferenceField(CharField):
 
     choices = property(_get_choices, ChoiceField._set_choices)
 
+    def prepare_value(self, value):
+        if self.to_field_name and hasattr(value, self.to_field_name):
+            return getattr(value, self.to_field_name)
+        return super().prepare_value(value)
+
+    def label_from_instance(self, obj):
+        if self.to_field_name and hasattr(obj, self.to_field_name):
+            return getattr(obj, self.to_field_name)
+        return str(obj)
+
 class TaskForm(Form):
 
     field_order = ['reference', 'description']
     
-    reference = FileReferenceField(
+    reference = DataListCharField(
         required=False, 
+        to_field_name='reference',
         queryset=File.objects.all(),
         max_length=File._meta.get_field('reference').max_length, 
         label=File._meta.get_field('reference').verbose_name
