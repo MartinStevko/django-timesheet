@@ -1,15 +1,44 @@
 
-from django.forms import ModelForm, CharField, ModelChoiceField
+from django.forms import ModelForm, ModelChoiceField, Select
+from django.core import validators
 
 from django_timesheet.timesheet.models import Task, File
 
-class FileReferenceField(CharField):
+class DatalistInput(Select):
 
-    pass
+    template_name = 'timesheet/forms/widgets/datalist_input.html'
+
+class FileReferenceField(ModelChoiceField):
+
+    widget = DatalistInput
+
+    default_validators = [
+        validators.MaxLengthValidator(File._meta.get_field('reference').max_length)
+    ]
+
+    def __init__(self, *args, **kwargs):
+        kwargs.update(
+            {
+                'empty_label': None,
+                'label': File._meta.get_field('reference').verbose_name,
+            })
+        return super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        return value
+
+    def prepare_value(self, obj):
+        if hasattr(obj, 'reference'):
+            return obj.reference
+        return super().prepare_value(obj)
+
+    def label_from_instance(self, obj):
+        return obj.reference
 
 class TaskForm(ModelForm):
 
-    reference = FileReferenceField(required=False, max_length=128)
+    field_order = ['reference', 'description']
+    reference = FileReferenceField(required=False, queryset=File.objects.all())
 
     class Meta:
         model = Task

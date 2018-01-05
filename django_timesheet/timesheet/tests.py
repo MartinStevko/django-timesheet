@@ -22,13 +22,10 @@ class TimesheetModels(TestCase):
         with self.assertRaises(IntegrityError):
             File.objects.create(reference='abc')
 
-
 class TimesheetForms(TestCase):
 
-    def test_create_task_with_file_reference(self):
+    def test_create_task_with_known_file_reference(self):
         file = File.objects.create(reference='abc')
-        
-        # Creates a task for a known file reference
         form = TaskForm({
             'reference': 'abc',
             'description': 'task description',
@@ -38,27 +35,54 @@ class TimesheetForms(TestCase):
         self.assertEqual(Task.objects.count(), 1)
         self.assertEqual(task.file, file)
 
-        # Creates a task for an unknown file reference
+    def test_create_task_with_unknown_file_reference(self):
         form = TaskForm({
             'reference': 'abcdef',
             'description': 'task description',
         })
         form.is_valid()
-        task2 = form.save()
-        self.assertEqual(Task.objects.count(), 2)
-        self.assertEqual(File.objects.count(), 2)
-        self.assertEqual(task2.file.reference, 'abcdef')
+        task = form.save()
+        self.assertEqual(Task.objects.count(), 1)
+        self.assertEqual(File.objects.count(), 1)
+        self.assertEqual(task.file.reference, 'abcdef')
 
+    def test_create_task_with_empty_file_reference(self):
         # Creates no file, if reference is empty
         form = TaskForm({
             'reference': '',
             'description': 'task description',
         })
         form.is_valid()
-        task3 = form.save()
-        self.assertEqual(Task.objects.count(), 3)
-        self.assertEqual(File.objects.count(), 2)
-        self.assertIsNone(task3.file)
+        task = form.save()
+        self.assertEqual(Task.objects.count(), 1)
+        self.assertIsNone(task.file)
+
+    def test_max_length_reference(self):
+        form = TaskForm({
+            'reference': 'a'*129, # invalid
+            'description': 'valid',
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn('reference', form.errors)
+
+    def test_reference_widget_template(self):
+        form = TaskForm()
+        widget = form.fields['reference'].widget
+        self.assertEqual(widget.template_name, 'timesheet/forms/widgets/datalist_input.html')
+
+    def test_reference_widget_choices(self):
+        File.objects.create(reference='foo')
+        form = TaskForm()
+        widget = form.fields['reference'].widget
+        self.assertListEqual(list(widget.choices), [('foo', 'foo')])
+ 
+    def test_render_reference_field(self):
+        File.objects.create(reference='foo')
+        form = TaskForm()
+        html = '{}'.format(form['reference'])
+        self.assertIn('input', html)
+        self.assertIn('datalist', html)
+        self.assertIn('<option value="foo">', html)
 
 class TimesheetViews(TestCase):
 
