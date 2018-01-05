@@ -76,6 +76,13 @@ class TaskFormTest(TestCase):
         widget = form.fields['reference'].widget
         self.assertListEqual(list(widget.choices), [('foo', 'foo')])
  
+    def test_widget_context(self):
+        File.objects.create(reference='foo')
+        form = TaskForm()
+        widget = form.fields['reference'].widget
+        context = widget.get_context('foo', 'bar', {})
+        self.assertEqual(context['widget']['datalist'], [('foo', 'foo')])
+
     def test_render_reference_field(self):
         File.objects.create(reference='foo')
         form = TaskForm()
