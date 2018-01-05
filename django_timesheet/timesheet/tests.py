@@ -102,6 +102,15 @@ class TimesheetViews(TestCase):
         self.assertRedirects(response, reverse('index'))
         self.assertEqual(File.objects.first().reference, 'abc')
         self.assertEqual(File.objects.first().task_set.first().description, 'task')
+
+    def test_update_file(self):
+        file = File.objects.create(reference='a')
+        response = self.client.get(reverse('file', args=(file.pk,)))
+        self.assertTemplateUsed('timesheet/file_form.html')        
+        response = self.client.post(reverse('file', args=(file.pk,)), data={'reference': 'b'})
+        self.assertRedirects(response, file.get_absolute_url())
+        file.refresh_from_db()
+        self.assertEqual(file.reference, 'b')
         
     def test_create_task_from_file(self):
 
