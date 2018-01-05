@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 
 from django_timesheet.timesheet.models import File, Task
-from django_timesheet.timesheet.forms import TaskForm
+from django_timesheet.timesheet.forms import TaskForm, FileSearchForm
 
 class HomePage(generic.TemplateView):
 
@@ -13,6 +13,8 @@ class HomePage(generic.TemplateView):
     def get_context_data(self, **kwargs):
         if 'form' not in kwargs:
             kwargs['form'] = TaskForm()
+        if 'search_form' not in kwargs:
+            kwargs['search_form'] = FileSearchForm()
         kwargs['object_list'] = Task.objects.filter(timer__status__in=['', 'running', 'paused'])
         return super().get_context_data(**kwargs)
 
@@ -29,10 +31,15 @@ class FileListView(generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        lookup = self.request.GET.get('reference', None)
-        if lookup:
-            queryset = queryset.filter(reference__icontains=lookup)
+        self.lookup = self.request.GET.get('reference', None)
+        if self.lookup:
+            queryset = queryset.filter(reference__icontains=self.lookup)
         return queryset
+
+    def render_to_response(self, context):
+        if self.lookup and self.object_list.count() == 1:
+            return redirect(self.object_list.first())
+        return super().render_to_response(context)
 
 class FileUpdateView(generic.UpdateView):
 

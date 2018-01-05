@@ -13,7 +13,7 @@
 <h2>Akten suchen</h2>
 
 <form action="{% url 'file_list' %}" method="GET">
-    <input name="reference" />
+    {{ search_form }}
     <button type="submit">Suchen</button>
 </form>
 

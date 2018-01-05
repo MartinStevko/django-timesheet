@@ -164,13 +164,16 @@ class TimesheetViews(TestCase):
     def test_files_list(self):
 
         File.objects.create(reference='a123')
-        File.objects.create(reference='b123')
-        File.objects.create(reference='c123')
+        File.objects.create(reference='b1234')
+        File.objects.create(reference='c1234')
 
         response = self.client.get(reverse('file_list'))
         self.assertEqual(response.context['object_list'].count(), 3)
 
         # Search list
-        response = self.client.get(reverse('file_list'), data={'reference': 'b'})
-        self.assertEqual(response.context['object_list'].count(), 1)
-                
+        response = self.client.get(reverse('file_list'), data={'reference': '1234'})
+        self.assertEqual(response.context['object_list'].count(), 2)
+
+        # A single hit redirects to the file itself 
+        response = self.client.get(reverse('file_list'), data={'reference': 'a'})
+        self.assertRedirects(response, File.objects.first().get_absolute_url())
