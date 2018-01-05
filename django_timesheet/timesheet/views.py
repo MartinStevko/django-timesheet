@@ -36,6 +36,11 @@ class FileListView(generic.ListView):
             queryset = queryset.filter(reference__icontains=self.lookup)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        if 'lookup' not in kwargs:
+            kwargs['lookup'] = self.lookup
+        return super().get_context_data(**kwargs)
+
     def render_to_response(self, context):
         if self.lookup and self.object_list.count() == 1:
             return redirect(self.object_list.first())
