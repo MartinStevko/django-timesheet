@@ -1,4 +1,4 @@
-<input list="{{ widget.name }}_datalist" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+{% include "django/forms/widgets/text.html" %}
 <datalist id="{{ widget.name }}_datalist">
     {% for group_name, group_choices, group_index in widget.optgroups %}
         {% if group_name %}

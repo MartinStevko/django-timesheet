@@ -30,7 +30,7 @@ class FileReferenceField(ModelChoiceField):
     def prepare_value(self, obj):
         if hasattr(obj, 'reference'):
             return obj.reference
-        return super().prepare_value(obj)
+        return obj
 
     def label_from_instance(self, obj):
         return obj.reference

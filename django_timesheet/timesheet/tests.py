@@ -84,6 +84,10 @@ class TimesheetForms(TestCase):
         self.assertIn('datalist', html)
         self.assertIn('<option value="foo">', html)
 
+    def test_initial_reference(self):
+        form = TaskForm(initial={'reference': 'foo'})
+        self.assertEqual(form['reference'].value(), 'foo')
+
 class TimesheetViews(TestCase):
 
     def test_create_file(self):
