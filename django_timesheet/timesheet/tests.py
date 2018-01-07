@@ -4,6 +4,7 @@ import datetime
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
+from django.utils.timezone import now
 
 from django_timesheet.timesheet.models import File, Task
 from django_timesheet.timesheet.forms import TaskForm
@@ -21,6 +22,17 @@ class TimesheetModels(TestCase):
         File.objects.create(reference='abc')
         with self.assertRaises(IntegrityError):
             File.objects.create(reference='abc')
+
+    def test_timer_to_billable_hours(self):
+        task = Task.objects.create()
+        start = now()
+        task.timer.segment_set.create(
+            start_time = start,
+            stop_time = start + datetime.timedelta(seconds=15*60)
+        )
+        self.assertAlmostEqual(task.timer.duration().total_seconds(), 15*60, delta=0.001)
+        task.to_billable_time()
+        self.assertAlmostEqual(task.billable.total_seconds(), 15*60, delta=0.001)
 
 class TaskFormTest(TestCase):
 

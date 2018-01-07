@@ -1,3 +1,6 @@
+
+from datetime import timedelta
+
 from django.db import models
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -22,6 +25,7 @@ class Task(models.Model):
     date = models.DateField(_('Datum'), auto_now_add=True)
     description = models.TextField(_('Beschreibung'))
     timer = models.OneToOneField(to=Timer, null=True)
+    billable = models.DurationField(_('Abrechenbare Zeit'), default=timedelta(seconds=0))
 
     def get_absolute_url(self):
         return reverse_lazy('task', args=(self.pk,))
@@ -35,3 +39,8 @@ class Task(models.Model):
         if not self.timer:
             self.timer = Timer.objects.create()
         return super().save(*args, **kwargs)
+
+    def to_billable_time(self):
+        duration = self.timer.duration()
+        self.billable = duration
+        self.save()
