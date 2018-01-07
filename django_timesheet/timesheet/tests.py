@@ -34,6 +34,17 @@ class TimesheetModels(TestCase):
         task.to_billable_time()
         self.assertAlmostEqual(task.billable.total_seconds(), 15*60, delta=0.001)
 
+    def test_timer_to_billable_hours_with_min_duration_unit(self):
+        task = Task.objects.create(min_billable_time=datetime.timedelta(seconds=15*60))
+        start = now()
+        task.timer.segment_set.create(
+            start_time = start,
+            stop_time = start + datetime.timedelta(seconds=20*60)
+        )
+        self.assertAlmostEqual(task.timer.duration().total_seconds(), 20*60, delta=0.001)
+        task.to_billable_time()
+        self.assertAlmostEqual(task.billable.total_seconds(), 30*60, delta=0.001)
+
 class TaskFormTest(TestCase):
 
     def test_create_task_with_known_file_reference(self):

@@ -1,4 +1,5 @@
 
+from math import ceil
 from datetime import timedelta
 
 from django.db import models
@@ -26,6 +27,7 @@ class Task(models.Model):
     description = models.TextField(_('Beschreibung'))
     timer = models.OneToOneField(to=Timer, null=True)
     billable = models.DurationField(_('Abrechenbare Zeit'), default=timedelta(seconds=0))
+    min_billable_time = models.DurationField(_('kleinste Zeiteinheit'), default=timedelta(seconds=15*60))
 
     def get_absolute_url(self):
         return reverse_lazy('task', args=(self.pk,))
@@ -41,6 +43,6 @@ class Task(models.Model):
         return super().save(*args, **kwargs)
 
     def to_billable_time(self):
-        duration = self.timer.duration()
+        duration = ceil(self.timer.duration()/self.min_billable_time)*self.min_billable_time
         self.billable = duration
         self.save()
