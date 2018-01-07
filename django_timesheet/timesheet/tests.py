@@ -1,5 +1,6 @@
 
 import datetime
+from time import sleep
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -258,3 +259,13 @@ class TimesheetViews(TestCase):
         # Filter task list
         response = self.client.get(reverse('task_list'), data={'from_date': '1.1.2017', 'to_date': '1.2.2017'})
         self.assertEqual(response.context['object_list'].count(), 1)
+
+    def test_set_billable_time(self):
+        task = Task.objects.create()
+        task.timer.start()
+        sleep(0.1)
+        task.timer.stop()
+        response = self.client.post(reverse('set_billable_time', args=(task.pk,)))
+        task.refresh_from_db()
+        self.assertTrue(task.billable > datetime.timedelta(seconds=0))
+        self.assertRedirects(response, task.get_absolute_url())

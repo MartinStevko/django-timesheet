@@ -1,5 +1,5 @@
 {% extends 'django_timesheet/base.html' %}
-{% load timer %}
+{% load timer static %}
 
 {% block content %}
 <h2>Aufgabe</h2>
@@ -7,8 +7,15 @@
     {% csrf_token %}
     {{ form }}
     <button type="submit">Save</button>
+    {% if object.pk %}
+    <button type="submit" formaction="{% url 'set_billable_time' object.pk %}">Abrechenbare Zeit von Timer übernehmen</button>
+    {% endif %}
 </form>
 {% if object %}
 {% render_timer object.timer %}
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'django_timer/js/timer.js' %}"></script>
 {% endblock %}

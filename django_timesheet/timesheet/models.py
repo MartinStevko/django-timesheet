@@ -26,7 +26,7 @@ class Task(models.Model):
     date = models.DateField(_('Datum'), auto_now_add=True)
     description = models.TextField(_('Beschreibung'))
     timer = models.OneToOneField(to=Timer, null=True)
-    billable = models.DurationField(_('Abrechenbare Zeit'), default=timedelta(seconds=0))
+    billable = models.DurationField(_('Abrechenbare Zeit'), null=True)
     min_billable_time = models.DurationField(_('kleinste Zeiteinheit'), default=timedelta(seconds=15*60))
 
     def get_absolute_url(self):

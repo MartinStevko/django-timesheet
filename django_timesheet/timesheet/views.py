@@ -76,4 +76,14 @@ class TaskCreateView(generic.CreateView):
 class TaskUpdateView(generic.UpdateView):
 
     model = Task
-    fields = ('description',)
+    fields = ('description', 'billable', 'min_billable_time')
+
+class TaskSetBillableTimeView(generic.DetailView):
+
+    model = Task
+    http_method_names= ['post']
+
+    def post(self, request, **kwargs):
+        task = self.get_object()
+        task.to_billable_time()
+        return redirect(task)
