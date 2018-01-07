@@ -1,4 +1,5 @@
 {% extends 'django_timesheet/base.html' %}
+{% load timer %}
 
 {% block content %}
 <h2>Aufgabe</h2>
@@ -7,4 +8,7 @@
     {{ form }}
     <button type="submit">Save</button>
 </form>
+{% if object %}
+{% render_timer object.timer %}
+{% endif %}
 {% endblock %}
