@@ -231,3 +231,7 @@ class TimesheetViews(TestCase):
 
         response = self.client.get(reverse('task_list'))
         self.assertEqual(response.context['object_list'].count(), 3)
+
+        # Filter task list
+        response = self.client.get(reverse('task_list'), data={'from_date': '1.1.2017', 'to_date': '1.2.2017'})
+        self.assertEqual(response.context['object_list'].count(), 1)

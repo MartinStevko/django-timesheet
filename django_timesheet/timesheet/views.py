@@ -5,6 +5,7 @@ from django.views import generic
 
 from django_timesheet.timesheet.models import File, Task
 from django_timesheet.timesheet.forms import TaskForm, FileSearchForm
+from django_timesheet.timesheet.filters import TaskFilter
 
 class HomePage(generic.TemplateView):
 
@@ -54,6 +55,13 @@ class FileUpdateView(generic.UpdateView):
 class TaskListView(generic.ListView):
 
     model = Task
+    filter = TaskFilter
+
+    def get_context_data(self, **kwargs):
+        f = self.filter(self.request.GET, self.object_list)
+        kwargs['f'] = f
+        kwargs.update({'object_list': f.qs})
+        return super().get_context_data(**kwargs)
 
 class TaskCreateView(generic.CreateView):
 

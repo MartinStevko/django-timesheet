@@ -3,6 +3,12 @@
 
 {% block content %}
 <h2>Aufgaben</h2>
+<div>
+    <form action="" method="GET">
+        {{ f.form }}
+        <button type="submit">Filtern</button>
+    </form>
+</div>
 <table>
     {% for task in object_list %}
     <tr>
