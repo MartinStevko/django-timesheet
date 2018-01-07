@@ -1,12 +1,19 @@
-<title>Django Timesheet</title>
-
-{% block header %}
-<p>
-    <a href="{% url 'index' %}">Index</a>
-    <a href="{% url 'task_list' %}">Alle Aufgaben</a>
-    <a href="{% url 'task_archive' %}">Archiv</a>
-</p>
-{% endblock %}
-
-{% block content %}{% endblock %}
-{% block scripts %}{% endblock %}
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <title>Django Timesheet</title>
+        <link rel="stylesheet" href="{% static 'django_timesheet/css/style.css' %}" />
+    </head>
+    <body>
+        {% block header %}
+        <p>
+            <a href="{% url 'index' %}">Index</a>
+            <a href="{% url 'task_list' %}">Alle Aufgaben</a>
+            <a href="{% url 'task_archive' %}">Archiv</a>
+        </p>
+        {% endblock %}
+        {% block content %}{% endblock %}
+        {% block scripts %}{% endblock %}
+    </body>
+</html>
