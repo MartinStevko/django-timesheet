@@ -23,5 +23,9 @@
         <td colspan="5">No items found.</td>
     </tr>
     {% endfor %}
+    <tr>
+        <td colspan="4">Abrechenbare Zeit</td>
+        <td>{{ object_list.total_billable_time | hhmmss }}</td>
+    </tr>
 </table>
 {% endblock %}

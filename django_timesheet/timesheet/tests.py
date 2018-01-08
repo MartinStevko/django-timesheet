@@ -46,6 +46,18 @@ class TimesheetModels(TestCase):
         task.to_billable_time()
         self.assertAlmostEqual(task.billable.total_seconds(), 30*60, delta=0.001)
 
+    def test_total_billable_time(self):
+
+        f = File.objects.create()
+        Task.objects.create()
+        Task.objects.create(file=f, description='a', billable=datetime.timedelta(seconds=15*60))
+        Task.objects.create(description='a', billable=datetime.timedelta(seconds=15*60))
+        Task.objects.create(file=f, description='b', billable=datetime.timedelta(seconds=15*60))
+
+        self.assertEqual(Task.objects.all().total_billable_time(), datetime.timedelta(seconds=3*15*60))
+        self.assertEqual(Task.objects.filter(description='a').total_billable_time(), datetime.timedelta(seconds=2*15*60))
+        self.assertEqual(f.task_set.total_billable_time(), datetime.timedelta(seconds=2*15*60))
+
 class TaskFormTest(TestCase):
 
     def test_create_task_with_known_file_reference(self):

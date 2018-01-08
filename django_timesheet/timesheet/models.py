@@ -20,6 +20,11 @@ class File(models.Model):
     def __str__(self):
         return self.reference
 
+class TaskQueryset(models.QuerySet):
+
+    def total_billable_time(self):
+        return self.aggregate(models.Sum('billable'))['billable__sum']
+
 class Task(models.Model):
 
     file = models.ForeignKey(to=File, verbose_name=_('Akte'), blank=True, null=True)
@@ -28,6 +33,8 @@ class Task(models.Model):
     timer = models.OneToOneField(to=Timer, null=True)
     billable = models.DurationField(_('Abrechenbare Zeit'), null=True, blank=True)
     min_billable_time = models.DurationField(_('kleinste Zeiteinheit'), default=timedelta(seconds=15*60))
+
+    objects = TaskQueryset.as_manager()
 
     def get_absolute_url(self):
         return reverse_lazy('task', args=(self.pk,))
