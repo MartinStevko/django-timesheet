@@ -3,6 +3,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views import generic
 
+from django_tex.views import render_to_pdf
+
 from django_timesheet.timesheet.models import File, Task
 from django_timesheet.timesheet.forms import TaskForm, FileSearchForm
 from django_timesheet.timesheet.filters import TaskFilter
@@ -87,3 +89,11 @@ class TaskSetBillableTimeView(generic.DetailView):
         task = self.get_object()
         task.to_billable_time()
         return redirect(task)
+
+class TaskPdfListView(generic.ListView):
+
+    model = Task
+    template_name = 'timesheet/task_list.tex'
+
+    def render_to_response(self, context, **response_kwargs):
+        return render_to_pdf(self.template_name, context)

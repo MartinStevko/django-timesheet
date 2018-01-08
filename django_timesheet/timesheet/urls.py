@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^task/archive/$', ArchiveIndexView.as_view(model=Task, date_field='date'), name='task_archive'),
     url(r'^task/archive/(?P<year>\d{4})/$', YearArchiveView.as_view(model=Task, date_field='date'), name='task_archive'),
     url(r'^task/archive/(?P<year>\d{4})/(?P<month>\w+)/$', MonthArchiveView.as_view(model=Task, date_field='date'), name='task_archive'),
+    url(r'^task/pdf/$', views.TaskPdfListView.as_view(), name='task_list_pdf'),
 ]

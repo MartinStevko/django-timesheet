@@ -239,6 +239,8 @@ class TimesheetViews(TestCase):
         Task.objects.filter(pk=2).update(date=datetime.date(2017,2,1))
         Task.objects.filter(pk=3).update(date=datetime.date(2017,3,1))
 
+        self.assertEqual(reverse('task_archive', args=(2017,)), '/task/archive/2017/')
+
         response = self.client.get(reverse('task_archive', args=(2017,)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['date_list'].count(), 3)
@@ -266,6 +268,8 @@ class TimesheetViews(TestCase):
         Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,3,1))
         Task.objects.filter(pk=t3.pk).update(date=datetime.date(2017,3,1))
 
+        self.assertEqual(reverse('task_list'), '/task/')
+
         response = self.client.get(reverse('task_list'))
         self.assertEqual(response.context['object_list'].count(), 3)
 
@@ -282,3 +286,8 @@ class TimesheetViews(TestCase):
         task.refresh_from_db()
         self.assertTrue(task.billable > datetime.timedelta(seconds=0))
         self.assertRedirects(response, task.get_absolute_url())
+
+    def test_export_task_list_as_pdf(self):
+        self.assertEqual(reverse('task_list_pdf'), '/task/pdf/')
+        response = self.client.get(reverse('task_list_pdf'))
+        self.assertEqual(response.status_code, 200)
