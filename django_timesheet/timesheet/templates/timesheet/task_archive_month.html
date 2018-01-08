@@ -9,8 +9,12 @@
         <td>{% if task.file %}<a href="{{ task.file.get_absolute_url }}">{{ task.file }}</a>{% else %}*{% endif %}</td>
         <td>{{ task.date }}</td>
         <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
-        <td>{{ task.timer.duration | hhmmss }}</td>
+        <td>{{ task.billable | hhmmss }}</td>
     </tr>
     {% endfor %}
+    <tr>
+        <td colspan="3">Abrechenbare Zeit</td>
+        <td>{{ object_list.total_billable_time | hhmmss }}</td>
+    </tr>
 </table>
 {% endblock %}
