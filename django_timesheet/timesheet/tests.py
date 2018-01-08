@@ -155,7 +155,8 @@ class TimesheetViews(TestCase):
         task = Task.objects.create(description='a')
         response = self.client.get(reverse('task', args=(task.pk,)))
         self.assertTemplateUsed('timesheet/task_form.html')        
-        response = self.client.post(reverse('task', args=(task.pk,)), data={'description': 'b'})
+        response = self.client.post(reverse('task', args=(task.pk,)),
+            data={'description': 'b', 'min_billable_time':datetime.timedelta(seconds=15*60)})
         self.assertRedirects(response, task.get_absolute_url())
         task.refresh_from_db()
         self.assertEqual(task.description, 'b')
