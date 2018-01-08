@@ -18,12 +18,17 @@
         <td>{{ task.date }}</td>
         <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
         <td>{% render_timer task.timer %}</td>
+        <td>{{ task.billable | hhmmss }}</td>
     </tr>
     {% empty %}
     <tr>
         <td colspan="3">No tasks.</td>
     </tr>
     {% endfor %}
+    <tr>
+        <td colspan="3">Abrechenbare Zeit</td>
+        <td>{{ object.task_set.total_billable_time | hhmmss }}</td>
+    </tr>
 </table>
 
 <a href="{% url 'create_task' object.pk %}">Add task</a>
