@@ -2,6 +2,11 @@
 
 \begin{document}
 
-Test
+\begin{tabular}{lll}
+    {% for task in object_list %}
+    {{ task.file.reference | default('') }} & {{ task.description }} & {{ task.billable }} \\
+    {% endfor %}
+    \multicolumn{2}{l}{Summe} & {{ object_list.total_billable_time() }} \\
+\end{tabular}
 
 \end{document}

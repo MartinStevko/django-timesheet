@@ -90,9 +90,8 @@ class TaskSetBillableTimeView(generic.DetailView):
         task.to_billable_time()
         return redirect(task)
 
-class TaskPdfListView(generic.ListView):
+class TaskPdfListView(TaskListView):
 
-    model = Task
     template_name = 'timesheet/task_list.tex'
 
     def render_to_response(self, context, **response_kwargs):
