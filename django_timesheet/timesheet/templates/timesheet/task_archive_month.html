@@ -38,6 +38,8 @@
     </tr>
 </table>
 <p>
-    <a href="{% url 'task_archive_pdf' month.year month.month %}">PDF</a>
+    {% with month_name=month|date:"b" %}
+    <a href="{% url 'task_archive_pdf' month.year month_name %}">PDF</a>
+    {% endwith %}
 </p>
 {% endblock %}

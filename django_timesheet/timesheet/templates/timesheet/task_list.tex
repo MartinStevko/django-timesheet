@@ -2,11 +2,19 @@
 
 \begin{document}
 
-\begin{tabular}{lll}
+\begin{tabular}{llll}
+    Datum &
+    Aktenzeichen &
+    Beschreibung &
+    Zeit \\
     {% for task in object_list %}
-    {{ task.file.reference | default('') }} & {{ task.description }} & {{ task.billable }} \\
+    {{ task.date | localize }} & 
+    {{ task.file.reference | default('') }} & 
+    {{ task.description }} & 
+    {{ task.billable }} \\
     {% endfor %}
-    \multicolumn{2}{l}{Summe} & {{ object_list.total_billable_time() }} \\
+    \multicolumn{3}{l}{Summe} & 
+    {{ object_list.total_billable_time() }} \\
 \end{tabular}
 
 \end{document}

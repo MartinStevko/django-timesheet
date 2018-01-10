@@ -96,3 +96,13 @@ class TaskPdfListView(TaskListView):
 
     def render_to_response(self, context, **response_kwargs):
         return render_to_pdf(self.template_name, context)
+
+class MonthlyTaskPDFView(generic.dates.MonthArchiveView):
+
+    model = Task
+    date_field = 'date'
+    template_name = 'timesheet/task_list.tex'
+
+    def render_to_response(self, context, **response_kwargs):
+        return render_to_pdf(self.template_name, context)
+
