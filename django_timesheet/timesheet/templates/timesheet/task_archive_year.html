@@ -1,12 +1,22 @@
-{% extends 'django_timesheet/base.html' %}
-
-{% block content %}
-<h2>Aufgaben {{ year.year }}</h2>
+{% extends 'django_timesheet/base.html' %} {% block content %}
+<h2>
+    <ol class="breadcrumbs">
+        <li>
+            <a href="{% url 'index' %}">Startseite</a>
+        </li>
+        <li>
+            <a href="{% url 'task_archive' %}">Aufgaben</a>
+        </li>
+        <li>
+            {{ year.year }}
+        </li>
+    </ol>
+</h2>
 <table>
-    {% for date in date_list %}
-    {% with month=date|date:"b" %}
-    <tr><td><a href="{% url 'task_archive' date.year month %}">{{ date | date:"F" }}</a></td></tr>
-    {% endwith %}
-    {% endfor %}
+    {% for date in date_list %} {% with month=date|date:"b" %}
+    <tr>
+        <td><a href="{% url 'task_archive' date.year month %}">{{ date | date:"F" }}</a></td>
+    </tr>
+    {% endwith %} {% endfor %}
 </table>
 {% endblock %}

@@ -207,3 +207,20 @@ a.action {
     margin-right: 10px;
     margin-bottom: 10px;
 }
+
+.breadcrumbs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.breadcrumbs li a {
+    color: inherit;
+}
+
+.breadcrumbs li:not(:first-child)::before {
+    content: ">";
+    margin-left: 5.75px;
+}
