@@ -23,6 +23,15 @@
         </form>
     </div>
     <table>
+        <thead>
+            <tr>
+                <th>Aktenzeichen</th>
+                <th>Datum</th>
+                <th>Beschreibung</th>
+                <th>Timer</th>
+                <th>Abrechenbar</th>
+            </tr>
+        </thead>
         {% for task in object_list %}
         <tr>
             <td>{% if task.file %}<a href="{{ task.file.get_absolute_url }}">{{ task.file }}</a>{% else %}*{% endif %}</td>
@@ -33,7 +42,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="5">No items found.</td>
+            <td colspan="5">Keine Aufgaben gefunden.</td>
         </tr>
         {% endfor %}
         <tr>
