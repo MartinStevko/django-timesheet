@@ -72,8 +72,14 @@ class TaskCreateView(generic.CreateView):
 
     def get_initial(self):
         if 'pk' in self.kwargs:
-            file = get_object_or_404(File, pk=self.kwargs['pk'])
-            return {'file': file.pk}
+            self.file = get_object_or_404(File, pk=self.kwargs['pk'])
+            return {'file': self.file.pk}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if hasattr(self, 'file'):
+            context['file'] = self.file
+        return context
 
 class TaskUpdateView(generic.UpdateView):
 

@@ -2,7 +2,19 @@
 {% load static timer timesheet %}
 
 {% block content %}
-<h2>Akte</h2>
+<h2>
+    <ol class="breadcrumbs">
+        <li>
+            <a href="{% url 'index' %}">Startseite</a>
+        </li>
+        <li>
+            <a href="{% url 'file_list' %}">Akten</a>
+        </li>
+        <li>
+            {{ object.reference }}
+        </li>
+    </ol>
+</h2>
 
 <form action="" method="POST">
     {% csrf_token %}
@@ -32,8 +44,9 @@
         <td>{{ object.task_set.total_billable_time | hhmmss }}</td>
     </tr>
 </table>
-
-<a href="{% url 'create_task' object.pk %}">Add task</a>
+<p>
+    <a href="{% url 'create_task' object.pk %}">Add task</a>
+</p>
 {% endif %}
 {% endblock %}
 

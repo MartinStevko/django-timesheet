@@ -1,7 +1,16 @@
 {% extends 'django_timesheet/base.html' %}
 
 {% block content %}
-<h2>Akten</h2>
+<h2>
+    <ol class="breadcrumbs">
+        <li>
+            <a href="{% url 'index' %}">Startseite</a>
+        </li>
+        <li>
+            Akten
+        </li>
+    </ol>
+</h2>
 {% if lookup %}<p>Für Suchbegriff <strong>{{ lookup }}</strong>. <a href="{% url 'file_list' %}">Alle Akten</a></p>{% endif %}
 <table>
     {% for object in object_list %}

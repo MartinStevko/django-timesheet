@@ -2,7 +2,35 @@
 {% load timer static timesheet %}
 
 {% block content %}
-<h2>Aufgabe</h2>
+<h2>
+    <ol class="breadcrumbs">
+        <li>
+            <a href="{% url 'index' %}">Startseite</a>
+        </li>
+        {% if object.file %}
+        <li>
+            <a href="{% url 'file_list' %}">Akten</a>
+        </li>
+        <li>
+            <a href="{% url 'file' object.file.pk %}">{{ object.file.reference }}</a>
+        </li>
+        {% elif file %}
+        <li>
+            <a href="{% url 'file_list' %}">Akten</a>
+        </li>
+        <li>
+            <a href="{{ file.get_absolute_url }}">{{ file.reference }}</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="{% url 'task_list' %}">Aufgaben</a>
+        </li>
+        {% endif %}
+        <li>
+            Aufgabe
+        </li>
+    </ol>
+</h2>
 <form action="" method="POST">
     {% csrf_token %}
     {% render_form form %}
