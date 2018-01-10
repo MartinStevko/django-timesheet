@@ -30,7 +30,6 @@ var autoComplete = (function(){
 
         var o = {
             selector: 0,
-            source: 0,
             minChars: 3,
             delay: 150,
             offsetLeft: 0,
@@ -61,28 +60,42 @@ var autoComplete = (function(){
             that.cache = {};
             that.last_val = '';
 
-            // that.updateSC = function(resize, next){
-            //     var rect = that.getBoundingClientRect();
-            //     that.sc.style.left = Math.round(rect.left + (window.pageXOffset || document.documentElement.scrollLeft) + o.offsetLeft) + 'px';
-            //     that.sc.style.top = Math.round(rect.bottom + (window.pageYOffset || document.documentElement.scrollTop) + o.offsetTop) + 'px';
-            //     that.sc.style.width = Math.round(rect.right - rect.left) + 'px'; // outerWidth
-            //     if (!resize) {
-            //         that.sc.style.display = 'block';
-            //         if (!that.sc.maxHeight) { that.sc.maxHeight = parseInt((window.getComputedStyle ? getComputedStyle(that.sc, null) : that.sc.currentStyle).maxHeight); }
-            //         if (!that.sc.suggestionHeight) that.sc.suggestionHeight = that.sc.querySelector('.autocomplete-suggestion').offsetHeight;
-            //         if (that.sc.suggestionHeight)
-            //             if (!next) that.sc.scrollTop = 0;
-            //             else {
-            //                 var scrTop = that.sc.scrollTop, selTop = next.getBoundingClientRect().top - that.sc.getBoundingClientRect().top;
-            //                 if (selTop + that.sc.suggestionHeight - that.sc.maxHeight > 0)
-            //                     that.sc.scrollTop = selTop + that.sc.suggestionHeight + scrTop - that.sc.maxHeight;
-            //                 else if (selTop < 0)
-            //                     that.sc.scrollTop = selTop + scrTop;
-            //             }
-            //     }
-            // }
-            // addEvent(window, 'resize', that.updateSC);
+            that.choices = ['foo', 'bar', 'foobar', 'footy', 'wunderbar'];
+
+            that.source = function(term, response){
+                term = term.toLowerCase();
+                var matches = [];
+                for (i=0; i<that.choices.length; i++){
+                    if (that.choices[i].toLowerCase().indexOf(term) != -1){
+                        matches.push(that.choices[i])
+                    }
+                };
+                response(matches);
+            }
+
+            that.updateSC = function(resize, next){
+                var rect = that.getBoundingClientRect();
+                that.sc.style.left = Math.round(rect.left + (window.pageXOffset || document.documentElement.scrollLeft) + o.offsetLeft) + 'px';
+                that.sc.style.top = Math.round(rect.bottom + (window.pageYOffset || document.documentElement.scrollTop) + o.offsetTop) + 'px';
+                that.sc.style.width = Math.round(rect.right - rect.left) + 'px'; // outerWidth
+                if (!resize) {
+                    that.sc.style.display = 'block';
+                    if (!that.sc.maxHeight) { that.sc.maxHeight = parseInt((window.getComputedStyle ? getComputedStyle(that.sc, null) : that.sc.currentStyle).maxHeight); }
+                    if (!that.sc.suggestionHeight) that.sc.suggestionHeight = that.sc.querySelector('.autocomplete-suggestion').offsetHeight;
+                    if (that.sc.suggestionHeight)
+                        if (!next) that.sc.scrollTop = 0;
+                        else {
+                            var scrTop = that.sc.scrollTop, selTop = next.getBoundingClientRect().top - that.sc.getBoundingClientRect().top;
+                            if (selTop + that.sc.suggestionHeight - that.sc.maxHeight > 0)
+                                that.sc.scrollTop = selTop + that.sc.suggestionHeight + scrTop - that.sc.maxHeight;
+                            else if (selTop < 0)
+                                that.sc.scrollTop = selTop + scrTop;
+                        }
+                }
+            }
+            addEvent(window, 'resize', that.updateSC);
             document.body.appendChild(that.sc);
+            // that.parentElement.insertBefore(that.sc, that.nextSibling)
 
             live('autocomplete-suggestion', 'mouseleave', function(e){
                 var sel = that.sc.querySelector('.autocomplete-suggestion.selected');
@@ -121,7 +134,7 @@ var autoComplete = (function(){
                     var s = '';
                     for (var i=0;i<data.length;i++) s += o.renderItem(data[i], val);
                     that.sc.innerHTML = s;
-                    // that.updateSC(0);
+                    that.updateSC(0);
                 }
                 else
                     that.sc.style.display = 'none';
@@ -174,7 +187,7 @@ var autoComplete = (function(){
                                     if (part in that.cache && !that.cache[part].length) { suggest([]); return; }
                                 }
                             }
-                            that.timer = setTimeout(function(){ o.source(val, suggest) }, o.delay);
+                            that.timer = setTimeout(function(){ that.source(val, suggest) }, o.delay);
                         }
                     } else {
                         that.last_val = val;
@@ -227,17 +240,5 @@ input = document.querySelector('#id_reference')
 // Custom initialization of autocomplete for reference inputs
 new autoComplete({
     selector: input,
-    source: function(term, suggest){
-        term = term.toLowerCase();
-        var choices = ['foo', 'bar'];
-        var matches = [];
-        for (i=0; i<choices.length; i++){
-            if (choices[i].toLowerCase().indexOf(term) != -1){
-                matches.push(choices[i])
-                console.log(choices[i])
-            }
-        }
-        suggest(matches)
-    },
     minChars: 2,
 });
