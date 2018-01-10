@@ -291,3 +291,10 @@ class TimesheetViews(TestCase):
         self.assertEqual(reverse('task_list_pdf'), '/task/pdf/')
         response = self.client.get(reverse('task_list_pdf'))
         self.assertEqual(response.status_code, 200)
+
+    def test_export_monthly_task_list_as_pdf(self):
+        t1=Task.objects.create()
+        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
+
+        response = self.client.get(reverse('task_archive_pdf', args=(2017, 'jan')))
+        self.assertEqual(response.status_code, 200)
