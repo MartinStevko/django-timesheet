@@ -10,7 +10,7 @@ body {
 }
 
 main .container {
-    max-width: 750px;
+    max-width: 1000px;
     margin: auto;
 }
 
@@ -109,20 +109,11 @@ button.small {
     padding: 0.25em 0.5em;
 }
 
-.grid {
+.grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 12px;
+    grid-gap: 2em;
 }
-
-.grid p:first-child {
-    margin-top: 0;
-}
-
-.grid p:last-child {
-    margin-bottom: 0;
-}
-
 
 table {
     width: 100%;
