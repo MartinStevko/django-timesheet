@@ -5,7 +5,7 @@
 <section>
     <h2>Aufgaben</h2>
     <div>
-        <form class="filter-form" action="" method="GET">
+        <form id="filter-form" class="filter-form" action="" method="GET">
             {% for field in f.form %}
             <div class="filter-input">
                 {{ field.label_tag }}
@@ -37,5 +37,8 @@
             <td>{{ object_list.total_billable_time | hhmmss }}</td>
         </tr>
     </table>
+    <p>
+        <button type="submit" form="filter-form" formaction="{% url 'task_list_pdf' %}">PDF</button>
+    </p>
 </section>
 {% endblock %}

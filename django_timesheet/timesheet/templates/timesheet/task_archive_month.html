@@ -37,4 +37,7 @@
         <td>{{ object_list.total_billable_time | hhmmss }}</td>
     </tr>
 </table>
+<p>
+    <a href="{% url 'task_archive_pdf' month.year month.month %}">PDF</a>
+</p>
 {% endblock %}
