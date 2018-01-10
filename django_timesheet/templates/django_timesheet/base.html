@@ -2,21 +2,13 @@
 <!doctype html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Django Timesheet</title>
         <link rel="stylesheet" href="{% static 'django_timesheet/css/normalize.css' %}" />
         <link rel="stylesheet" href="{% static 'django_timesheet/css/style.css' %}" />
     </head>
     <body>
-        <header>
-            <div class="container">
-                {% block header %}
-                <a href="{% url 'index' %}">Index</a>
-                <a href="{% url 'task_list' %}">Alle Aufgaben</a>
-                <a href="{% url 'task_archive' %}">Archiv</a>
-                {% endblock %}
-            </div>
-        </header>
         <main>
             <div class="container">
                 {% block content %}{% endblock %}

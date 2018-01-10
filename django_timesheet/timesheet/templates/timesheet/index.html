@@ -1,34 +1,50 @@
 {% extends 'django_timesheet/base.html' %}
-{% load timer static %}
+{% load timer static timesheet %}
 
 {% block content %}
-<h2>Akten suchen</h2>
-<form action="{% url 'file_list' %}" method="GET">
-    {{ search_form }}
-</form>
-<p><a href="{% url 'file_list' %}">Alle Akten</a></p>
+<header>
+    {% block header %}
+    <a href="{% url 'index' %}">Index</a>
+    <a href="{% url 'task_list' %}">Alle Aufgaben</a>
+    <a href="{% url 'task_archive' %}">Archiv</a>
+    {% endblock %}
+</header>
 
-<h2>Aufgabe hinzufügen</h2>
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Speichern</button>
-</form>
+<section>
+    <h2>Akten suchen</h2>
+    <form action="{% url 'file_list' %}" method="GET">
+        {{ search_form }}
+    </form>
+    <p><a href="{% url 'file_list' %}">Alle Akten</a></p>
+</section>
 
-<h2>Laufende Aufgaben</h2>
-<table>
-    {% for task in object_list %}
-    <tr>
-        <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
-        <td>{{ task.date }}</td>
-        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
-        <td>{% render_timer task.timer %}</td>
-    {% empty %}
-    <tr>
-        <td colspan="4">No items found.</td>
-    </tr>
-    {% endfor %}
-</table>
+<section>
+    <h2>Aufgabe hinzufügen</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% render_form form %}
+        <p>
+            <button type="submit">Speichern</button>
+        </p>
+    </form>
+</section>
+
+<section>
+    <h2>Laufende Aufgaben</h2>
+    <table>
+        {% for task in object_list %}
+        <tr>
+            <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
+            <td>{{ task.date }}</td>
+            <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
+            <td>{% render_timer task.timer %}</td>
+        {% empty %}
+        <tr>
+            <td colspan="4">No items found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
 
 {% endblock %}
 

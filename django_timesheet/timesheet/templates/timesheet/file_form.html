@@ -1,13 +1,15 @@
 {% extends 'django_timesheet/base.html' %}
-{% load static timer %}
+{% load static timer timesheet %}
 
 {% block content %}
 <h2>Akte</h2>
 
 <form action="" method="POST">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit">Save</button>
+    {% render_form form %}
+    <p>
+        <button type="submit">Save</button>
+    </p>
 </form>
 
 {% if object.pk %}
