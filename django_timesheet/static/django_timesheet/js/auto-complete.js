@@ -61,27 +61,27 @@ var autoComplete = (function(){
             that.cache = {};
             that.last_val = '';
 
-            that.updateSC = function(resize, next){
-                var rect = that.getBoundingClientRect();
-                that.sc.style.left = Math.round(rect.left + (window.pageXOffset || document.documentElement.scrollLeft) + o.offsetLeft) + 'px';
-                that.sc.style.top = Math.round(rect.bottom + (window.pageYOffset || document.documentElement.scrollTop) + o.offsetTop) + 'px';
-                that.sc.style.width = Math.round(rect.right - rect.left) + 'px'; // outerWidth
-                if (!resize) {
-                    that.sc.style.display = 'block';
-                    if (!that.sc.maxHeight) { that.sc.maxHeight = parseInt((window.getComputedStyle ? getComputedStyle(that.sc, null) : that.sc.currentStyle).maxHeight); }
-                    if (!that.sc.suggestionHeight) that.sc.suggestionHeight = that.sc.querySelector('.autocomplete-suggestion').offsetHeight;
-                    if (that.sc.suggestionHeight)
-                        if (!next) that.sc.scrollTop = 0;
-                        else {
-                            var scrTop = that.sc.scrollTop, selTop = next.getBoundingClientRect().top - that.sc.getBoundingClientRect().top;
-                            if (selTop + that.sc.suggestionHeight - that.sc.maxHeight > 0)
-                                that.sc.scrollTop = selTop + that.sc.suggestionHeight + scrTop - that.sc.maxHeight;
-                            else if (selTop < 0)
-                                that.sc.scrollTop = selTop + scrTop;
-                        }
-                }
-            }
-            addEvent(window, 'resize', that.updateSC);
+            // that.updateSC = function(resize, next){
+            //     var rect = that.getBoundingClientRect();
+            //     that.sc.style.left = Math.round(rect.left + (window.pageXOffset || document.documentElement.scrollLeft) + o.offsetLeft) + 'px';
+            //     that.sc.style.top = Math.round(rect.bottom + (window.pageYOffset || document.documentElement.scrollTop) + o.offsetTop) + 'px';
+            //     that.sc.style.width = Math.round(rect.right - rect.left) + 'px'; // outerWidth
+            //     if (!resize) {
+            //         that.sc.style.display = 'block';
+            //         if (!that.sc.maxHeight) { that.sc.maxHeight = parseInt((window.getComputedStyle ? getComputedStyle(that.sc, null) : that.sc.currentStyle).maxHeight); }
+            //         if (!that.sc.suggestionHeight) that.sc.suggestionHeight = that.sc.querySelector('.autocomplete-suggestion').offsetHeight;
+            //         if (that.sc.suggestionHeight)
+            //             if (!next) that.sc.scrollTop = 0;
+            //             else {
+            //                 var scrTop = that.sc.scrollTop, selTop = next.getBoundingClientRect().top - that.sc.getBoundingClientRect().top;
+            //                 if (selTop + that.sc.suggestionHeight - that.sc.maxHeight > 0)
+            //                     that.sc.scrollTop = selTop + that.sc.suggestionHeight + scrTop - that.sc.maxHeight;
+            //                 else if (selTop < 0)
+            //                     that.sc.scrollTop = selTop + scrTop;
+            //             }
+            //     }
+            // }
+            // addEvent(window, 'resize', that.updateSC);
             document.body.appendChild(that.sc);
 
             live('autocomplete-suggestion', 'mouseleave', function(e){
@@ -121,7 +121,7 @@ var autoComplete = (function(){
                     var s = '';
                     for (var i=0;i<data.length;i++) s += o.renderItem(data[i], val);
                     that.sc.innerHTML = s;
-                    that.updateSC(0);
+                    // that.updateSC(0);
                 }
                 else
                     that.sc.style.display = 'none';
@@ -220,3 +220,24 @@ var autoComplete = (function(){
     else
         window.autoComplete = autoComplete;
 })();
+
+// Select the first input
+input = document.querySelector('#id_reference')
+
+// Custom initialization of autocomplete for reference inputs
+new autoComplete({
+    selector: input,
+    source: function(term, suggest){
+        term = term.toLowerCase();
+        var choices = ['foo', 'bar'];
+        var matches = [];
+        for (i=0; i<choices.length; i++){
+            if (choices[i].toLowerCase().indexOf(term) != -1){
+                matches.push(choices[i])
+                console.log(choices[i])
+            }
+        }
+        suggest(matches)
+    },
+    minChars: 2,
+});
