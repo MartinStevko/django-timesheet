@@ -26,6 +26,7 @@
 
 {% if object.pk %}
 <h3>Aufgaben</h3>
+<p><a href="{% url 'create_task' object.pk %}">Neue Aufgabe hinzufügen.</a></p>
 <table>
     {% for task in object.task_set.all %}
     <tr>
@@ -44,9 +45,6 @@
         <td>{{ object.task_set.total_billable_time | hhmmss }}</td>
     </tr>
 </table>
-<p>
-    <a href="{% url 'create_task' object.pk %}">Add task</a>
-</p>
 {% endif %}
 {% endblock %}
 
