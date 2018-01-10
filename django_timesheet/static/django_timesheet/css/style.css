@@ -205,3 +205,14 @@ a.action {
 .filter-input {
     width: 200px;
 }
+
+.filter-form {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.filter-input {
+    width: 200px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
