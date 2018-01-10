@@ -21,10 +21,6 @@
         </section>
         <section>
             <h2>Laufende Aufgaben</h2>
-            <p>
-                <a href="{% url 'task_list' %}">Alle Aufgaben</a>
-                <a href="{% url 'task_archive' %}">Archiv</a>
-            </p>
             <table>
                 {% for task in object_list %}
                 <tr>
@@ -34,10 +30,14 @@
                     <td>{% render_timer task.timer %}</td>
                     {% empty %}
                     <tr>
-                        <td colspan="4">No items found.</td>
+                        <td colspan="4">Keine laufenden Aufgaben.</td>
                     </tr>
                     {% endfor %}
             </table>
+            <p>
+                <a href="{% url 'task_list' %}">Alle Aufgaben</a>
+                <a href="{% url 'task_archive' %}">Archiv</a>
+            </p>
         </section>
     </div>
 </div>
