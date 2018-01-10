@@ -198,7 +198,7 @@ class TimesheetViews(TestCase):
         timer.refresh_from_db()
         self.assertTrue(timer.status, 'stopped')
 
-    def test_files_list(self):
+    def test_list_files(self):
 
         File.objects.create(reference='a123')
         File.objects.create(reference='b1234')

@@ -11,7 +11,18 @@
         </li>
     </ol>
 </h2>
-{% if lookup %}<p>Für Suchbegriff <strong>{{ lookup }}</strong>. <a href="{% url 'file_list' %}">Alle Akten</a></p>{% endif %}
+<div>
+    <form id="filter-form" class="filter-form" action="" method="GET">
+        {% for field in f.form %}
+        <div class="filter-input">
+            {{ field.label_tag }} {{ field }} {{ field.errors}}
+        </div>
+        {% endfor %}
+        <div class="filter-input filter-button">
+            <button type="submit">Filtern</button>
+        </div>
+    </form>
+</div>
 <table>
     {% for object in object_list %}
     <tr>
