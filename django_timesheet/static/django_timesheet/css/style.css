@@ -225,3 +225,27 @@ a.action {
     content: ">";
     margin-left: 5.75px;
 }
+
+.django-timer form {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.django-timer-buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+}
+
+.django-timer-display {
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+}
+
+.django-timer-buttons button {
+    margin-left: 5px;
+    padding: 0;
+    background: unset;
+    border: unset;
+}
