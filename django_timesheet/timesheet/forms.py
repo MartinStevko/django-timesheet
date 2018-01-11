@@ -25,7 +25,7 @@ class DataListIterator(object):
 
 class DataListCharField(CharField):
 
-    widget = DatalistInput
+    widget = DatalistInput(attrs={'class': 'autocomplete'})
     iterator = DataListIterator
 
     def __init__(self, queryset, to_field_name=None, *args, **kwargs):
