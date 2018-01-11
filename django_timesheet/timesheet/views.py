@@ -6,7 +6,7 @@ from django.views import generic
 from django_tex.views import render_to_pdf
 
 from django_timesheet.timesheet.models import File, Task
-from django_timesheet.timesheet.forms import TaskForm, FileSearchForm
+from django_timesheet.timesheet.forms import TaskForm, FileSearchForm, TaskFromFileForm
 from django_timesheet.timesheet.filters import TaskFilter, FileFilter
 
 class FilterMixin(object):
@@ -59,7 +59,7 @@ class TaskListView(FilterMixin, generic.ListView):
 class TaskCreateView(generic.CreateView):
 
     model = Task
-    fields = ('file', 'description')
+    form_class = TaskFromFileForm
 
     def get_initial(self):
         if 'pk' in self.kwargs:

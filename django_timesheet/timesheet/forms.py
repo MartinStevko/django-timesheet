@@ -1,5 +1,5 @@
 
-from django.forms import Form, CharField, TextInput, ChoiceField
+from django.forms import Form, CharField, TextInput, ChoiceField, ModelForm, HiddenInput
 from django.core import validators
 
 from django_timesheet.timesheet.models import Task, File
@@ -56,6 +56,15 @@ class DataListCharField(CharField):
         if self.to_field_name and hasattr(obj, self.to_field_name):
             return getattr(obj, self.to_field_name)
         return str(obj)
+
+class TaskFromFileForm(ModelForm):
+
+    class Meta:
+        model = Task
+        fields = ['file', 'description']
+        widgets = {
+            'file': HiddenInput,
+        }
 
 class TaskForm(Form):
 

@@ -1,8 +1,12 @@
 
 {% for field in form %}
+{% if field.is_hidden %}
+{{ field }}
+{% else %}
 <p>
     {{ field.label_tag }}
     {{ field }}
     {{ field.errors }}
 </p>
+{% endif %}
 {% endfor %}
