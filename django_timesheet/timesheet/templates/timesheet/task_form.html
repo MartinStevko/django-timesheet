@@ -35,7 +35,7 @@
     {% csrf_token %}
     {% render_form form %}
     <p>
-        <button type="submit">Save</button>
+        <button type="submit">Speichern</button>
         {% if object.pk %}
         <button type="submit" formaction="{% url 'set_billable_time' object.pk %}">Abrechenbare Zeit von Timer übernehmen</button>
         {% endif %}
