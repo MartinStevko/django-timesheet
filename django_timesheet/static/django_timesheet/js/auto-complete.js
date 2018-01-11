@@ -60,14 +60,25 @@ var autoComplete = (function(){
             that.cache = {};
             that.last_val = '';
 
-            that.choices = ['foo', 'bar', 'foobar', 'footy', 'wunderbar'];
+            that.datalist_id = that.getAttribute('list')
+            that.setAttribute('list', '')
+
+            that.datalist = document.getElementById(that.datalist_id)
+
+            that.choices = [];
+            for (i=1; i<that.datalist.options.length; i++){
+                that.choices.push(that.datalist.options[i].getAttribute('value'))
+            };
 
             that.source = function(term, response){
                 term = term.toLowerCase();
                 var matches = [];
                 for (i=0; i<that.choices.length; i++){
                     if (that.choices[i].toLowerCase().indexOf(term) != -1){
-                        matches.push(that.choices[i])
+                        matches.push(that.choices[i]);
+                        console.log(that.choices[i]);
+                    } else {
+                        console.log('no match')
                     }
                 };
                 response(matches);
