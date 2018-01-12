@@ -147,7 +147,7 @@ class TaskFormTest(TestCase):
         t1=Task.objects.create()
         Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
 
-        response = self.client.get(reverse('task_archive_pdf', args=(2017, 'jan')))
+        response = self.client.get(reverse('task_archive_pdf', args=(2017, 1)))
         self.assertEqual(response.status_code, 200)
         
 class TimesheetViews(TestCase):
@@ -240,7 +240,7 @@ class TaskListTest(TestCase):
         Task.objects.filter(pk=t1.pk).update(date=datetime.date(2016,1,1))
         
         t2 = Task.objects.create(description='Obladi-oblada')
-        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,1,1))
+        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,5,1))
         
         t3 = Task.objects.create(description='foobar')
         Task.objects.filter(pk=t3.pk).update(date=datetime.date(2018,1,1))
@@ -268,6 +268,6 @@ class TaskListTest(TestCase):
 
     def test_month_archive(self):
 
-        response = self.client.get(reverse('task_archive', args=(2017, 'Jan')))
+        response = self.client.get(reverse('task_archive', args=(2017, 5)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['object_list'].count(), 1)

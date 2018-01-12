@@ -90,11 +90,10 @@ class TaskMonthArchive(FilterMixin, generic.dates.MonthArchiveView):
     model = Task
     date_field = 'date'
     filter = TaskFilter
+    month_format = '%m'
 
-class MonthlyTaskPDFView(generic.dates.MonthArchiveView):
+class MonthlyTaskPDFView(TaskMonthArchive):
 
-    model = Task
-    date_field = 'date'
     template_name = 'timesheet/task_list.tex'
 
     def render_to_response(self, context, **response_kwargs):

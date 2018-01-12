@@ -17,11 +17,11 @@
 {% endblock %}
 
 {% block archive_navigation %}
-<table>
+<ul>
     {% for date in date_list %}
-    <tr><td><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></td></tr>
+    <li><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></li>
     {% endfor %}
-</table>
+</ul>
 {% endblock %}
 
 {% block filter %}

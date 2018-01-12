@@ -30,10 +30,10 @@ urlpatterns = [
     url(r'^task/archive/(?P<year>\d{4})/$',
         views.TaskYearArchive.as_view(),
         name='task_archive'),
-    url(r'^task/archive/(?P<year>\d{4})/(?P<month>\w+)/$',
+    url(r'^task/archive/(?P<year>\d{4})/(?P<month>\d{1,2})/$',
         views.TaskMonthArchive.as_view(),
         name='task_archive'),
-    url(r'^task/archive/(?P<year>\d{4})/(?P<month>\w+)/pdf/$',
+    url(r'^task/archive/(?P<year>\d{4})/(?P<month>\d{1,2})/pdf/$',
         views.MonthlyTaskPDFView.as_view(),
         name='task_archive_pdf'),
 ]
