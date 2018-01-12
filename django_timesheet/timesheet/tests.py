@@ -133,24 +133,6 @@ class TaskFormTest(TestCase):
         form = TaskForm(initial={'reference': 'foo'})
         self.assertEqual(form['reference'].value(), 'foo')
 
-    def test_task_list(self):
-        t1=Task.objects.create()
-        t2=Task.objects.create()
-        t3=Task.objects.create()
-
-        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
-        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,3,1))
-        Task.objects.filter(pk=t3.pk).update(date=datetime.date(2017,3,1))
-
-        self.assertEqual(reverse('task_list'), '/task/')
-
-        response = self.client.get(reverse('task_list'))
-        self.assertEqual(response.context['object_list'].count(), 3)
-
-        # Filter task list
-        response = self.client.get(reverse('task_list'), data={'from_date': '1.1.2017', 'to_date': '1.2.2017'})
-        self.assertEqual(response.context['object_list'].count(), 1)
-
     def test_set_billable_time(self):
         task = Task.objects.create()
         task.timer.start()
@@ -160,11 +142,6 @@ class TaskFormTest(TestCase):
         task.refresh_from_db()
         self.assertTrue(task.billable > datetime.timedelta(seconds=0))
         self.assertRedirects(response, task.get_absolute_url())
-
-    def test_export_task_list_as_pdf(self):
-        self.assertEqual(reverse('task_list_pdf'), '/task/pdf/')
-        response = self.client.get(reverse('task_list_pdf'))
-        self.assertEqual(response.status_code, 200)
 
     def test_export_monthly_task_list_as_pdf(self):
         t1=Task.objects.create()

@@ -46,11 +46,6 @@ class FileListView(FilterMixin, generic.ListView):
             return redirect(context['object_list'].first())
         return super().render_to_response(context)
 
-class TaskListView(FilterMixin, generic.ListView):
-
-    model = Task
-    filter = TaskFilter
-
 class TaskCreateView(generic.CreateView):
 
     model = Task
@@ -77,22 +72,6 @@ class TaskSetBillableTimeView(generic.DetailView):
         task.to_billable_time()
         return redirect(task)
 
-class TaskPdfListView(TaskListView):
-
-    template_name = 'timesheet/task_list.tex'
-
-    def render_to_response(self, context, **response_kwargs):
-        return render_to_pdf(self.template_name, context)
-
-class MonthlyTaskPDFView(generic.dates.MonthArchiveView):
-
-    model = Task
-    date_field = 'date'
-    template_name = 'timesheet/task_list.tex'
-
-    def render_to_response(self, context, **response_kwargs):
-        return render_to_pdf(self.template_name, context)
-
 class TaskArchive(FilterMixin, generic.dates.ArchiveIndexView):
 
     model = Task
@@ -111,3 +90,12 @@ class TaskMonthArchive(FilterMixin, generic.dates.MonthArchiveView):
     model = Task
     date_field = 'date'
     filter = TaskFilter
+
+class MonthlyTaskPDFView(generic.dates.MonthArchiveView):
+
+    model = Task
+    date_field = 'date'
+    template_name = 'timesheet/task_list.tex'
+
+    def render_to_response(self, context, **response_kwargs):
+        return render_to_pdf(self.template_name, context)
