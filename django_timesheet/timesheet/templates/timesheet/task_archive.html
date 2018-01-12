@@ -1,6 +1,9 @@
 {% extends 'timesheet/base.html' %}
+{% load timer %}
 
 {% block content %}
+
+{% block breadcrumbs %}
 <h2>
     <ol class="breadcrumbs">
         <li>
@@ -11,9 +14,60 @@
         </li>
     </ol>
 </h2>
+{% endblock %}
+
+{% block archive_navigation %}
 <table>
     {% for date in date_list %}
     <tr><td><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></td></tr>
     {% endfor %}
 </table>
+{% endblock %}
+
+{% block filter %}
+<div>
+    <form id="filter-form" class="filter-form" action="" method="GET">
+        {% for field in f.form %}
+        <div class="filter-input">
+            {{ field.label_tag }} {{ field }} {{ field.errors}}
+        </div>
+        {% endfor %}
+        <div class="filter-input filter-button">
+            <button type="submit">Filtern</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block object_list %}
+<table>
+    <thead>
+        <tr>
+            <th>Aktenzeichen</th>
+            <th>Datum</th>
+            <th>Beschreibung</th>
+            <th>Timer</th>
+            <th>Abrechenbar</th>
+        </tr>
+    </thead>
+    {% for task in object_list %}
+    <tr>
+        <td>{% if task.file %}<a href="{{ task.file.get_absolute_url }}">{{ task.file }}</a>{% else %}*{% endif %}</td>
+        <td>{{ task.date }}</td>
+        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
+        <td>{{ task.timer.duration | hhmmss }}</td>
+        <td>{{ task.billable | hhmmss }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Keine Aufgaben gefunden.</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="4">Abrechenbare Zeit</td>
+        <td>{{ object_list.total_billable_time | hhmmss }}</td>
+    </tr>
+</table>
+{% endblock %}
+
 {% endblock %}

@@ -93,3 +93,8 @@ class MonthlyTaskPDFView(generic.dates.MonthArchiveView):
     def render_to_response(self, context, **response_kwargs):
         return render_to_pdf(self.template_name, context)
 
+class TaskArchive(FilterMixin, generic.dates.ArchiveIndexView):
+
+    model = Task
+    date_field = 'date'
+    filter = TaskFilter

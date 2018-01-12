@@ -133,6 +133,46 @@ class TaskFormTest(TestCase):
         form = TaskForm(initial={'reference': 'foo'})
         self.assertEqual(form['reference'].value(), 'foo')
 
+    def test_task_list(self):
+        t1=Task.objects.create()
+        t2=Task.objects.create()
+        t3=Task.objects.create()
+
+        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
+        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,3,1))
+        Task.objects.filter(pk=t3.pk).update(date=datetime.date(2017,3,1))
+
+        self.assertEqual(reverse('task_list'), '/task/')
+
+        response = self.client.get(reverse('task_list'))
+        self.assertEqual(response.context['object_list'].count(), 3)
+
+        # Filter task list
+        response = self.client.get(reverse('task_list'), data={'from_date': '1.1.2017', 'to_date': '1.2.2017'})
+        self.assertEqual(response.context['object_list'].count(), 1)
+
+    def test_set_billable_time(self):
+        task = Task.objects.create()
+        task.timer.start()
+        sleep(0.1)
+        task.timer.stop()
+        response = self.client.post(reverse('set_billable_time', args=(task.pk,)))
+        task.refresh_from_db()
+        self.assertTrue(task.billable > datetime.timedelta(seconds=0))
+        self.assertRedirects(response, task.get_absolute_url())
+
+    def test_export_task_list_as_pdf(self):
+        self.assertEqual(reverse('task_list_pdf'), '/task/pdf/')
+        response = self.client.get(reverse('task_list_pdf'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_export_monthly_task_list_as_pdf(self):
+        t1=Task.objects.create()
+        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
+
+        response = self.client.get(reverse('task_archive_pdf', args=(2017, 'jan')))
+        self.assertEqual(response.status_code, 200)
+        
 class TimesheetViews(TestCase):
 
     def test_home_page(self):
@@ -215,86 +255,40 @@ class TimesheetViews(TestCase):
         response = self.client.get(reverse('file_list'), data={'reference': 'a'})
         self.assertRedirects(response, File.objects.first().get_absolute_url())
 
+class TaskListTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        t1 = Task.objects.create(description='foo')
+        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2016,1,1))
+        
+        t2 = Task.objects.create(description='bar')
+        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,1,1))
+        
+        t3 = Task.objects.create(description='foobar')
+        Task.objects.filter(pk=t3.pk).update(date=datetime.date(2018,1,1))
+
     def test_task_archive_index(self):
-
-        Task.objects.create()
-        Task.objects.create()
-        Task.objects.create()
-
-        Task.objects.filter(pk=1).update(date=datetime.date(2016,1,1))
-        Task.objects.filter(pk=2).update(date=datetime.date(2017,1,1))
-        Task.objects.filter(pk=3).update(date=datetime.date(2018,1,1))
 
         response = self.client.get(reverse('task_archive'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['date_list'].count(), 3)
-        self.assertEqual(response.context['latest'].count(), 3)
+        self.assertEqual(response.context['object_list'].count(), 3)
+
+    def test_filter_archive(self):
+        response = self.client.get(reverse('task_archive'), data={'description': 'foo'})
+        self.assertEqual(response.context['date_list'].count(), 3)
+        self.assertEqual(response.context['object_list'].count(), 2)
 
     def test_year_archive(self):
-        Task.objects.create()
-        Task.objects.create()
-        Task.objects.create()
-
-        Task.objects.filter(pk=1).update(date=datetime.date(2017,1,1))
-        Task.objects.filter(pk=2).update(date=datetime.date(2017,2,1))
-        Task.objects.filter(pk=3).update(date=datetime.date(2017,3,1))
-
-        self.assertEqual(reverse('task_archive', args=(2017,)), '/task/archive/2017/')
 
         response = self.client.get(reverse('task_archive', args=(2017,)))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['date_list'].count(), 3)
+        self.assertEqual(response.context['date_list'].count(), 1)
+        self.assertEqual(response.context['object_list'].count(), 1)
 
     def test_month_archive(self):
 
-        t1=Task.objects.create()
-        t2=Task.objects.create()
-        t3=Task.objects.create()
-
-        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
-        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,3,1))
-        Task.objects.filter(pk=t3.pk).update(date=datetime.date(2017,3,1))
-
-        response = self.client.get(reverse('task_archive', args=(2017, 'Mar')))
+        response = self.client.get(reverse('task_archive', args=(2017, 'Jan')))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['object_list'].count(), 2)
-
-    def test_task_list(self):
-        t1=Task.objects.create()
-        t2=Task.objects.create()
-        t3=Task.objects.create()
-
-        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
-        Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,3,1))
-        Task.objects.filter(pk=t3.pk).update(date=datetime.date(2017,3,1))
-
-        self.assertEqual(reverse('task_list'), '/task/')
-
-        response = self.client.get(reverse('task_list'))
-        self.assertEqual(response.context['object_list'].count(), 3)
-
-        # Filter task list
-        response = self.client.get(reverse('task_list'), data={'from_date': '1.1.2017', 'to_date': '1.2.2017'})
         self.assertEqual(response.context['object_list'].count(), 1)
-
-    def test_set_billable_time(self):
-        task = Task.objects.create()
-        task.timer.start()
-        sleep(0.1)
-        task.timer.stop()
-        response = self.client.post(reverse('set_billable_time', args=(task.pk,)))
-        task.refresh_from_db()
-        self.assertTrue(task.billable > datetime.timedelta(seconds=0))
-        self.assertRedirects(response, task.get_absolute_url())
-
-    def test_export_task_list_as_pdf(self):
-        self.assertEqual(reverse('task_list_pdf'), '/task/pdf/')
-        response = self.client.get(reverse('task_list_pdf'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_export_monthly_task_list_as_pdf(self):
-        t1=Task.objects.create()
-        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
-
-        response = self.client.get(reverse('task_archive_pdf', args=(2017, 'jan')))
-        self.assertEqual(response.status_code, 200)
