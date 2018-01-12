@@ -262,7 +262,7 @@ class TaskListTest(TestCase):
         t1 = Task.objects.create(description='foo')
         Task.objects.filter(pk=t1.pk).update(date=datetime.date(2016,1,1))
         
-        t2 = Task.objects.create(description='bar')
+        t2 = Task.objects.create(description='Obladi-oblada')
         Task.objects.filter(pk=t2.pk).update(date=datetime.date(2017,1,1))
         
         t3 = Task.objects.create(description='foobar')
@@ -286,6 +286,8 @@ class TaskListTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['date_list'].count(), 1)
         self.assertEqual(response.context['object_list'].count(), 1)
+        self.assertContains(response, 'Obladi-oblada')
+        self.assertTrue(hasattr(response.context['f'], 'form'))
 
     def test_month_archive(self):
 

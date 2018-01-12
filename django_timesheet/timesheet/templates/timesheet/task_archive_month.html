@@ -1,4 +1,6 @@
-{% extends 'timesheet/base.html' %} {% load timer %} {% block content %}
+{% extends 'timesheet/task_archive.html' %}
+
+{% block breadcrumbs %}
 <h2>
     <ol class="breadcrumbs">
         <li>
@@ -15,31 +17,7 @@
         </li>
     </ol>
 </h2>
-<table>
-    <thead>
-        <tr>
-            <th>Akte</th>
-            <th>Datum</th>
-            <th>Beschreibung</th>
-            <th>Zeit</th>
-        </tr>
-    </thead>
-    {% for task in object_list %}
-    <tr>
-        <td>{% if task.file %}<a href="{{ task.file.get_absolute_url }}">{{ task.file }}</a>{% else %}*{% endif %}</td>
-        <td>{{ task.date }}</td>
-        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
-        <td>{{ task.billable | hhmmss }}</td>
-    </tr>
-    {% endfor %}
-    <tr>
-        <td colspan="3">Abrechenbare Zeit</td>
-        <td>{{ object_list.total_billable_time | hhmmss }}</td>
-    </tr>
-</table>
-<p>
-    {% with month_name=month|date:"b" %}
-    <a href="{% url 'task_archive_pdf' month.year month_name %}">PDF</a>
-    {% endwith %}
-</p>
+{% endblock %}
+
+{% block archive_navigation %}
 {% endblock %}

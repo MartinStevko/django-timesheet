@@ -98,3 +98,16 @@ class TaskArchive(FilterMixin, generic.dates.ArchiveIndexView):
     model = Task
     date_field = 'date'
     filter = TaskFilter
+
+class TaskYearArchive(FilterMixin, generic.dates.YearArchiveView):
+
+    model = Task
+    date_field = 'date'
+    filter = TaskFilter
+    make_object_list = True
+
+class TaskMonthArchive(FilterMixin, generic.dates.MonthArchiveView):
+
+    model = Task
+    date_field = 'date'
+    filter = TaskFilter

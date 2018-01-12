@@ -1,4 +1,6 @@
-{% extends 'timesheet/base.html' %} {% block content %}
+{% extends 'timesheet/task_archive.html' %}
+
+{% block breadcrumbs %}
 <h2>
     <ol class="breadcrumbs">
         <li>
@@ -12,6 +14,9 @@
         </li>
     </ol>
 </h2>
+{% endblock %}
+
+{% block archive_navigation %}
 <table>
     {% for date in date_list %} {% with month=date|date:"b" %}
     <tr>
