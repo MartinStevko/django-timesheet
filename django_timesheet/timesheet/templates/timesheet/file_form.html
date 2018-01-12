@@ -28,12 +28,23 @@
 <h3>Aufgaben</h3>
 <p><a href="{% url 'create_task' object.pk %}">Neue Aufgabe hinzufügen.</a></p>
 <table>
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Beschreibung</th>
+            <!-- <th>Timer</th> -->
+            <th>Abrechenbar</th>
+        </tr>
+    </thead>
     {% for task in object.task_set.all %}
     <tr>
         <td>{{ task.date }}</td>
         <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
+        {% if task.timer.status != 'stopped' %}
         <td>{% render_timer task.timer %}</td>
+        {% else %}
         <td>{{ task.billable | hhmmss }}</td>
+        {% endif %}
     </tr>
     {% empty %}
     <tr>
@@ -41,7 +52,7 @@
     </tr>
     {% endfor %}
     <tr>
-        <td colspan="3">Abrechenbare Zeit</td>
+        <td colspan="2">Abrechenbare Zeit</td>
         <td>{{ object.task_set.total_billable_time | hhmmss }}</td>
     </tr>
 </table>
