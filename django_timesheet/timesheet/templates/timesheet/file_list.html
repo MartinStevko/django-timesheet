@@ -2,48 +2,46 @@
 {% load timer %}
 
 {% block main %}
-<main>
-    <h2>
-        <ol class="breadcrumbs">
-            <li>
-                <a href="{% url 'index' %}">Startseite</a>
-            </li>
-            <li>
-                Akten
-            </li>
-        </ol>
-    </h2>
-    <div>
-        <form id="filter-form" class="filter-form" action="" method="GET">
-            {% for field in f.form %}
-            <div class="filter-input">
-                {{ field.label_tag }} {{ field }} {{ field.errors}}
-            </div>
-            {% endfor %}
-            <div class="filter-input filter-button">
-                <button type="submit">Filtern</button>
-            </div>
-        </form>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Aktenzeichen</th>
-                <th>Aufgaben</th>
-                <th>Abrechenbare Zeit</th>
-            </tr>
-        </thead>
-        {% for object in object_list %}
-        <tr>
-            <td><a href="{{ object.get_absolute_url }}">{{ object.reference }}</a></td>
-            <td>{{ object.task_set.count }}</td>
-            <td>{{ object.task_set.total_billable_time | hhmmss }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="3">Keine Akten gefunden.</td>
-        </tr>
+<h2>
+    <ol class="breadcrumbs">
+        <li>
+            <a href="{% url 'index' %}">Startseite</a>
+        </li>
+        <li>
+            Akten
+        </li>
+    </ol>
+</h2>
+<div>
+    <form id="filter-form" class="filter-form" action="" method="GET">
+        {% for field in f.form %}
+        <div class="filter-input">
+            {{ field.label_tag }} {{ field }} {{ field.errors}}
+        </div>
         {% endfor %}
-    </table>
-</main>
+        <div class="filter-input filter-button">
+            <button type="submit">Filtern</button>
+        </div>
+    </form>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Aktenzeichen</th>
+            <th>Aufgaben</th>
+            <th>Abrechenbare Zeit</th>
+        </tr>
+    </thead>
+    {% for object in object_list %}
+    <tr>
+        <td><a href="{{ object.get_absolute_url }}">{{ object.reference }}</a></td>
+        <td>{{ object.task_set.count }}</td>
+        <td>{{ object.task_set.total_billable_time | hhmmss }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">Keine Akten gefunden.</td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
