@@ -1,4 +1,4 @@
-{% extends 'timesheet/task_archive.html' %}
+{% extends 'timesheet/task_archive.html' %} 
 
 {% block breadcrumbs %}
 <h2>
@@ -14,12 +14,17 @@
         </li>
     </ol>
 </h2>
-{% endblock %}
+{% endblock %} 
 
-{% block archive_navigation %}
-<ul>
-    {% for date in date_list %} 
-    <li><a href="{% url 'task_archive' date.year date.month %}">{{ date | date:"F" }}</a></li>
-    {% endfor %}
-</ul>
+{% block aside %}
+<aside>
+    <section class="archive-navigation">
+        <h3>Monate</h3>
+        <ul>
+            {% for date in date_list %}
+            <li><a href="{% url 'task_archive' date.year date.month %}">{{ date | date:"F" }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+</aside>
 {% endblock %}

@@ -1,7 +1,20 @@
 {% extends 'timesheet/base.html' %}
 {% load timer %}
 
-{% block content %}
+{% block aside %}
+<aside>
+    <section class="archive-navigation">
+        <h3>Jahre</h3>
+        <ul>
+            {% for date in date_list %}
+            <li><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></li>
+            {% endfor %}
+        </ul>
+    </section>
+</aside>
+{% endblock %}
+
+{% block main %}
 
 {% block breadcrumbs %}
 <h2>
@@ -14,14 +27,6 @@
         </li>
     </ol>
 </h2>
-{% endblock %}
-
-{% block archive_navigation %}
-<ul>
-    {% for date in date_list %}
-    <li><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></li>
-    {% endfor %}
-</ul>
 {% endblock %}
 
 {% block filter %}
@@ -70,4 +75,4 @@
 </table>
 {% endblock %}
 
-{% endblock %}
+{% endblock main %}
