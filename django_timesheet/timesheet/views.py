@@ -46,11 +46,6 @@ class FileListView(FilterMixin, generic.ListView):
             return redirect(context['object_list'].first())
         return super().render_to_response(context)
 
-class FileUpdateView(generic.UpdateView):
-
-    model = File
-    fields = ('reference',)
-
 class TaskListView(FilterMixin, generic.ListView):
 
     model = Task
@@ -71,11 +66,6 @@ class TaskCreateView(generic.CreateView):
         if hasattr(self, 'file'):
             context['file'] = self.file
         return context
-
-class TaskUpdateView(generic.UpdateView):
-
-    model = Task
-    fields = ('description', 'billable', 'min_billable_time')
 
 class TaskSetBillableTimeView(generic.DetailView):
 
