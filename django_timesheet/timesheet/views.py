@@ -1,6 +1,6 @@
 
 from django.shortcuts import redirect, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views import generic
 
 from django_tex.views import render_to_pdf
@@ -98,3 +98,9 @@ class MonthlyTaskPDFView(TaskMonthArchive):
 
     def render_to_response(self, context, **response_kwargs):
         return render_to_pdf(self.template_name, context)
+
+class DeleteTask(generic.DeleteView):
+
+    model = Task
+    success_url = reverse_lazy('index')
+    

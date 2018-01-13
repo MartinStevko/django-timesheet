@@ -133,23 +133,6 @@ class TaskFormTest(TestCase):
         form = TaskForm(initial={'reference': 'foo'})
         self.assertEqual(form['reference'].value(), 'foo')
 
-    def test_set_billable_time(self):
-        task = Task.objects.create()
-        task.timer.start()
-        sleep(0.1)
-        task.timer.stop()
-        response = self.client.post(reverse('set_billable_time', args=(task.pk,)))
-        task.refresh_from_db()
-        self.assertTrue(task.billable > datetime.timedelta(seconds=0))
-        self.assertRedirects(response, task.get_absolute_url())
-
-    def test_export_monthly_task_list_as_pdf(self):
-        t1=Task.objects.create()
-        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
-
-        response = self.client.get(reverse('task_archive_pdf', args=(2017, 1)))
-        self.assertEqual(response.status_code, 200)
-        
 class TimesheetViews(TestCase):
 
     def test_home_page(self):
@@ -231,6 +214,32 @@ class TimesheetViews(TestCase):
         # A single hit redirects to the file itself 
         response = self.client.get(reverse('file_list'), data={'reference': 'a'})
         self.assertRedirects(response, File.objects.first().get_absolute_url())
+
+    def test_set_billable_time(self):
+        task = Task.objects.create()
+        task.timer.start()
+        sleep(0.1)
+        task.timer.stop()
+        response = self.client.post(reverse('set_billable_time', args=(task.pk,)))
+        task.refresh_from_db()
+        self.assertTrue(task.billable > datetime.timedelta(seconds=0))
+        self.assertRedirects(response, task.get_absolute_url())
+
+    def test_export_monthly_task_list_as_pdf(self):
+        t1=Task.objects.create()
+        Task.objects.filter(pk=t1.pk).update(date=datetime.date(2017,1,1))
+
+        response = self.client.get(reverse('task_archive_pdf', args=(2017, 1)))
+        self.assertEqual(response.status_code, 200)
+        
+    def test_delete_task(self):
+        t = Task.objects.create()
+
+        response = self.client.get(reverse('delete_task', args=(t.pk,)))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(reverse('delete_task', args=(t.pk,)))
+        self.assertRedirects(response, reverse('index'))
 
 class TaskListTest(TestCase):
 
