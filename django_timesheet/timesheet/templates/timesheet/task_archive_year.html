@@ -16,15 +16,13 @@
 </h2>
 {% endblock %} 
 
-{% block aside %}
-<aside>
-    <section class="archive-navigation">
-        <h3>Monate</h3>
-        <ul>
-            {% for date in date_list %}
-            <li><a href="{% url 'task_archive' date.year date.month %}">{{ date | date:"F" }}</a></li>
-            {% endfor %}
-        </ul>
-    </section>
-</aside>
+{% block archive_navigation %}
+<div class="archive-navigation">
+    <h3>Monate</h3>
+    <ul>
+        {% for date in date_list %}
+        <li><a href="{% url 'task_archive' date.year date.month %}">{{ date | date:"F" }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

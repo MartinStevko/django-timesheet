@@ -1,20 +1,8 @@
 {% extends 'timesheet/base.html' %}
 {% load timer %}
 
-{% block aside %}
-<aside>
-    <section class="archive-navigation">
-        <h3>Jahre</h3>
-        <ul>
-            {% for date in date_list %}
-            <li><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></li>
-            {% endfor %}
-        </ul>
-    </section>
-</aside>
-{% endblock %}
-
 {% block main %}
+
 {% block breadcrumbs %}
 <h2>
     <ol class="breadcrumbs">
@@ -28,8 +16,19 @@
 </h2>
 {% endblock %}
 
+{% block archive_navigation %}
+<div class="archive-navigation">
+    <h3>Jahre</h3>
+    <ul>
+        {% for date in date_list %}
+        <li><a href="{% url 'task_archive' date.year %}">{{ date.year }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
 {% block filter %}
-<div>
+<div class="filters">
     <form id="filter-form" class="filter-form" action="" method="GET">
         {% for field in f.form %}
         <div class="filter-input">
