@@ -31,9 +31,9 @@ class TimesheetModels(TestCase):
             start_time = start,
             stop_time = start + datetime.timedelta(seconds=15*60)
         )
-        self.assertAlmostEqual(task.timer.duration().total_seconds(), 15*60, delta=0.001)
+        self.assertAlmostEqual(task.timer.duration().total_seconds(), 15*60, delta=0.01)
         task.to_billable_time()
-        self.assertAlmostEqual(task.billable.total_seconds(), 15*60, delta=0.001)
+        self.assertAlmostEqual(task.billable.total_seconds(), 15*60, delta=0.01)
 
     def test_timer_to_billable_hours_with_min_duration_unit(self):
         task = Task.objects.create(min_billable_time=datetime.timedelta(seconds=15*60))
@@ -42,9 +42,9 @@ class TimesheetModels(TestCase):
             start_time = start,
             stop_time = start + datetime.timedelta(seconds=20*60)
         )
-        self.assertAlmostEqual(task.timer.duration().total_seconds(), 20*60, delta=0.001)
+        self.assertAlmostEqual(task.timer.duration().total_seconds(), 20*60, delta=0.01)
         task.to_billable_time()
-        self.assertAlmostEqual(task.billable.total_seconds(), 30*60, delta=0.001)
+        self.assertAlmostEqual(task.billable.total_seconds(), 30*60, delta=0.01)
 
     def test_total_billable_time(self):
 
@@ -101,6 +101,14 @@ class TaskFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('reference', form.errors)
 
+    def test_empty_description(self):
+        form = TaskForm({
+            'reference': '123',
+            'description': '' # invalid
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIsNotNone(form.errors['description'])
+
     def test_reference_widget_template(self):
         form = TaskForm()
         widget = form.fields['reference'].widget
@@ -129,6 +137,11 @@ class TaskFormTest(TestCase):
         self.assertIn('list="reference_datalist"', html)
         self.assertIn('<option value="foo">', html)
 
+    def test_render_description_field(self):
+        form = TaskForm()
+        html = '{}'.format(form['description'])
+        self.assertNotIn('required', html)
+
     def test_initial_reference(self):
         form = TaskForm(initial={'reference': 'foo'})
         self.assertEqual(form['reference'].value(), 'foo')
@@ -147,6 +160,12 @@ class TimesheetViews(TestCase):
         self.assertRedirects(response, reverse('index'))
         self.assertEqual(File.objects.first().reference, 'abc')
         self.assertEqual(File.objects.first().task_set.first().description, 'task')
+
+    def test_create_task_with_empty_description(self):
+
+        response = self.client.post(reverse('index'), data={'reference': 'abc', 'description': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.context['form'].errors['description'])
 
     def test_update_file(self):
         file = File.objects.create(reference='a')
