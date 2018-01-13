@@ -24,6 +24,7 @@
     line-height: 2;
 }
 
+.autocomplete-suggestions li:hover,
 .autocomplete-suggestions li.selected {
     background: #f0f0f0; 
 }
