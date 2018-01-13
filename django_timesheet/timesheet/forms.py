@@ -1,6 +1,8 @@
 
-from django.forms import Form, CharField, TextInput, ChoiceField, ModelForm, HiddenInput
+from django.forms import Form, CharField, TextInput, ChoiceField, ModelForm, HiddenInput, Textarea
 from django.core import validators
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from django_timesheet.timesheet.models import Task, File
 
@@ -78,7 +80,13 @@ class TaskForm(Form):
         label=File._meta.get_field('reference').verbose_name
     )
 
-    description = Task._meta.get_field('description').formfield()
+    description = Task._meta.get_field('description').formfield(required=False)
+
+    def clean_description(self):
+        data = self.cleaned_data['description']
+        if not data:
+            raise ValidationError(_('This field is required.'), code='required')
+        return data
 
     def save(self):
         task = Task(description=self.cleaned_data['description'])

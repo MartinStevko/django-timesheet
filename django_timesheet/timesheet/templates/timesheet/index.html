@@ -8,10 +8,10 @@
             {% csrf_token %}
             <div class="index-form-row">
                 <div class="index-form-field">
-                    {{ form.reference.label_tag }} {{ form.reference }}
+                    {{ form.reference.label_tag }} {{ form.reference }} {{ form.reference.errors }}
                 </div>
                 <div class="index-form-field">
-                    {{ form.description.label_tag }} {{ form.description }}
+                    {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
                 </div>
             </div>
             <div class="button-group">
