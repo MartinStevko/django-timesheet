@@ -69,6 +69,12 @@ var autoComplete = (function(){
         }
 
         // Event handlers
+        input.suggestions.clickHandler = function(event){
+            var target = event.target
+            input.value = target.getAttribute('value')
+        }
+        input.suggestions.addEventListener('mousedown', input.suggestions.clickHandler)
+
         input.keyDownHandler = function(event){
             var key = event.which || event.keyCode;
             // up and down
