@@ -27,7 +27,7 @@
 {% block main %}
 <h2>Laufende Aufgaben</h2>
 <table>
-    {% for task in object_list %}
+    {% for task in object_list.pending %}
     <tr>
         <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
         <td>{{ task.date }}</td>
@@ -39,9 +39,11 @@
         </tr>
         {% endfor %}
 </table>
+{% if object_list.count %}
 <p>
     <a href="{% url 'task_archive' %}">Alle Aufgaben</a>
 </p>
+{% endif %}
 {% endblock %} 
 
 {% block scripts %}

@@ -25,6 +25,9 @@ class TaskQueryset(models.QuerySet):
     def total_billable_time(self):
         return self.aggregate(models.Sum('billable'))['billable__sum']
 
+    def pending(self):
+        return self.filter(timer__status__in=['', 'running', 'paused'])
+
 class Task(models.Model):
 
     file = models.ForeignKey(to=File, verbose_name=_('Akte'), blank=True, null=True)

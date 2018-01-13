@@ -58,6 +58,23 @@ class TimesheetModels(TestCase):
         self.assertEqual(Task.objects.filter(description='a').total_billable_time(), datetime.timedelta(seconds=2*15*60))
         self.assertEqual(f.task_set.total_billable_time(), datetime.timedelta(seconds=2*15*60))
 
+    def test_task_manager(self):
+
+        t = Task.objects.create()
+
+        t = Task.objects.create()
+        t.timer.start()
+
+        t = Task.objects.create()
+        t.timer.start()
+        t.timer.pause()
+
+        t = Task.objects.create()
+        t.timer.start()
+        t.timer.stop()
+
+        self.assertEqual(Task.objects.pending().count(), 3)
+
 class TaskFormTest(TestCase):
 
     def test_create_task_with_known_file_reference(self):

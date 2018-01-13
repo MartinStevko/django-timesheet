@@ -26,7 +26,7 @@ class HomePage(generic.TemplateView):
             kwargs['form'] = TaskForm()
         if 'search_form' not in kwargs:
             kwargs['search_form'] = FileSearchForm()
-        kwargs['object_list'] = Task.objects.filter(timer__status__in=['', 'running', 'paused'])
+        kwargs['object_list'] = Task.objects.all()
         return super().get_context_data(**kwargs)
 
     def post(self, request):
