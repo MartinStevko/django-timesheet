@@ -1,3 +1,6 @@
+
+/* General */
+
 * {
     box-sizing: border-box;
 }
@@ -9,41 +12,46 @@ body {
     color: #333;
 }
 
-body .container {
+/* Container, header and main */
+
+.container {
     max-width: 1000px;
     margin: auto;
     padding: 0px 10px;
+}
+
+header {
+    border-bottom: 1px solid #ccc;
+    background: #fafbfc;
+    padding: 14px 0px;
 }
 
 main section {
     margin-bottom: 12px;
 }
 
+/* Headings */
+
 h1, h2, h3 {
     font-weight: normal;
 }
+
+/* Links */
 
 a {
     color: #d50000;
     text-decoration: none;
 }
 
-h1 a {
-    color: inherit;
-}
-
-a.button {
-    display: inline-block;
-    line-height: 1.15;
-}
-
 a:hover {
     text-decoration: underline;
 }
 
+/* Button groups */
+
 .button-group {
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     align-items: baseline;
 }
 
@@ -55,13 +63,18 @@ a:hover {
     justify-content: flex-end;
 }
 
-label {
-    font-weight: 600;
+.button-group button,
+.button-group a {
+    white-space: nowrap;
 }
 
-h2 label {
-    font-weight: unset;
+.button-group span.or {
+    flex: 1;
+    font-style: italic;
+    text-align: center;
 }
+
+/* Buttons, inputs and labels */
 
 button, input, textarea, select {
     font-family: inherit;
@@ -69,6 +82,10 @@ button, input, textarea, select {
     font-size: inherit;
     line-height: inherit;
 }
+
+label {
+    font-weight: 600;
+}    
 
 input:not([type="checkbox"]), textarea {
     padding: 8px 10px;
@@ -80,10 +97,6 @@ textarea {
     height: 66px;
 }
 
-table textarea {
-    height: 38.333px;    
-}
-
 input[type='number'] {
     -moz-appearance: textfield;
     width: 100%;
@@ -91,6 +104,7 @@ input[type='number'] {
 
 a.button,
 button {
+    display: inline-block;
     padding: 0.75em 1.25em;
     color: #28a745;
     border: 1px solid #28a745;
@@ -99,35 +113,31 @@ button {
     line-height: 1;
 }
 
-button[type="submit"] {
-    background: #28a745;
-    color: white;
-    border: none;
-}
-
 button:hover {
     text-decoration: underline;
 }
 
-a.button.small,
-button.small {
-    padding: 0.25em 0.5em;
+button[type="submit"] {
+    background: #28a745;
+    color: white;
+    border: none;
+}    
+
+/* Form error lists */
+
+.errorlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: red;
 }
 
-.grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 2em;
-}
+/* Tables */
 
 table {
     width: 100%;
     border: 1px solid #ccc;
     border-collapse: collapse;
-}
-
-tr.template {
-    display: none;
 }
 
 th{
@@ -141,77 +151,7 @@ td, th {
     vertical-align: top;
 }
 
-td.currency, th.currency {
-    text-align: right;
-    white-space: nowrap;
-}
-
-td.with-action {
-    position: relative;
-    padding-right: 40px;
-}
-
-.action {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    cursor: pointer;
-}
-
-a.action {
-    text-decoration: none;
-}
-
-.delete::before {
-    content: "\00d7";
-    font-size: 25px;
-    line-height: 1;
-    color: #d50000;
-}
-
-.remove::before {
-    content: "\00d7";
-    font-size: 25px;
-    line-height: 1;
-    color: orange;
-}
-
-.errorlist {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    color: red;
-}
-
-.has-errors input,
-.has-errors textarea {
-    border-color: red;
-}
-
-.pull-right {
-    float: right;
-}
-
-
-.filter-form {
-    display: flex;
-    flex-flow: row wrap;
-}
-
-.filter-input {
-    width: 200px;
-}
-
-.filter-form {
-    display: flex;
-    flex-flow: row wrap;
-}
-
-.filter-input {
-    width: 200px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
+/* Breadcrumbs */
 
 .breadcrumbs {
     list-style: none;
@@ -229,6 +169,8 @@ a.action {
     content: ">";
     margin-left: 5.75px;
 }
+
+/* Django-Timer */
 
 .django-timer form {
     display: flex;
@@ -254,6 +196,30 @@ a.action {
     border: unset;
 }
 
+/* Filters */
+
+.filter-form {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.filter-input {
+    width: 200px;
+}
+
+.filter-form {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.filter-input {
+    width: 200px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* Filters and archive navigation */
+
 .filters,
 .archive-navigation {
     padding: 4px 10px;
@@ -261,6 +227,8 @@ a.action {
     border-right: 1px solid #ccc;
     border-left: 1px solid #ccc;
 }
+
+/* Archive pages */
 
 .archive-navigation h3 {
     font-size: inherit;
@@ -279,4 +247,16 @@ a.action {
 .archive-navigation li {
     margin-right: 10px;
 }
-    
+
+/* Index page */
+
+.index-form-row {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0px -10px;
+}
+
+.index-form-field {
+    flex: 1;
+    padding: 4px 10px;
+}

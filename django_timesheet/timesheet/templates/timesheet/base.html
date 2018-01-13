@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{% static 'timesheet/css/style.css' %}" />
     </head>
     <body>
+        {% block header %}{% endblock %}
         <div class="container">
         <main>{% block main %}{% endblock %}</main>
         </div>
