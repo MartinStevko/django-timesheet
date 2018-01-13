@@ -10,14 +10,19 @@
                 <div class="index-form-field">
                     {{ form.reference.label_tag }} {{ form.reference }} {{ form.reference.errors }}
                 </div>
+                {% if not object_list.pending.count %}
                 <div class="index-form-field">
                     {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
                 </div>
+                {% endif %}
             </div>
             <div class="button-group">
                 <button type="submit">Akten suchen</button>
-                <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> <span class="or">oder</span>
+                <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> 
+                {% if not object_list.pending.count %}
+                <span class="or">oder</span>
                 <button formaction="{% url 'index' %}" formmethod="POST" type="submit">Aufgabe hinzufügen</button>
+                {% endif %}
             </div>
         </form>
     </div>
