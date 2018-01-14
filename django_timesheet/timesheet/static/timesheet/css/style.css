@@ -159,6 +159,7 @@ td, th {
     padding: 0;
     display: flex;
     flex-flow: row wrap;
+    align-items: center;
 }
 
 .breadcrumbs li a {
@@ -168,6 +169,11 @@ td, th {
 .breadcrumbs li:not(:first-child)::before {
     content: ">";
     margin-left: 5.75px;
+}
+
+.breadcrumbs li input {
+    padding: 2px 10px;
+    width: unset;
 }
 
 /* Django-Timer */

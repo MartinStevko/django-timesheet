@@ -1,29 +1,33 @@
 {% extends 'timesheet/base.html' %}
 {% load static timer timesheet %}
 
+{% block header %}
+<header>
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h2>
+                <ol class="breadcrumbs">
+                    <li>
+                        <a href="{% url 'index' %}">Startseite</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'file_list' %}">Akten</a>
+                    </li>
+                    <li>
+                        {{ form.reference }}
+                    </li>
+                </ol>
+            </h2>
+            <p>
+                <button type="submit">Speichern</button>
+            </p>
+        </form>
+    </div>        
+</header>       
+{% endblock %} 
+
 {% block main %}
-<h2>
-    <ol class="breadcrumbs">
-        <li>
-            <a href="{% url 'index' %}">Startseite</a>
-        </li>
-        <li>
-            <a href="{% url 'file_list' %}">Akten</a>
-        </li>
-        <li>
-            {{ object.reference }}
-        </li>
-    </ol>
-</h2>
-
-<form action="" method="POST">
-    {% csrf_token %}
-    {% render_form form %}
-    <p>
-        <button type="submit">Speichern</button>
-    </p>
-</form>
-
 {% if object.pk %}
 <h3>Aufgaben</h3>
 <p><a href="{% url 'create_task' object.pk %}">Neue Aufgabe hinzufügen.</a></p>
