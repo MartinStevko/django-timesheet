@@ -1,0 +1,64 @@
+.current-task .row {
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 12px;
+    align-items: baseline;
+}
+
+.current-task .info-group {
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.current-task .row > *:not(:last-child) {
+    margin-right: 12px;
+}
+
+.current-task .label {
+    font-weight: 600;
+}
+
+.current-task .info {
+    padding: 8px 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+.current-task .django-timer-display {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+.current-task .django-timer-buttons button {
+    padding: 8px 10px;
+    color: #fff;
+    border-radius: 4px;
+    background: #28a745;
+    border: 1px solid #28a745;
+}
+
+.current-task #django-timer-stop {
+    background: red;
+    border-color: red;
+}
+
+@keyframes blink {
+    from {
+        border-color: #ccc;
+        box-shadow: none;
+    }
+    to {
+        border-color: #337ab4;
+        box-shadow: 0 0 10px #337ab4;
+    }   
+}
+
+.current-task .django-timer-display:not(.active) {
+    animation: blink;
+    animation-duration: 1s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}

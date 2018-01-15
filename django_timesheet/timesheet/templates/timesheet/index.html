@@ -1,6 +1,10 @@
 {% extends 'timesheet/base.html' %} 
 {% load timer static timesheet %} 
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'timesheet/css/index.css' %}" />
+{% endblock %}
+
 {% block header %}
 <header>
     <div class="container">
@@ -11,11 +15,15 @@
                 <div class="index-form-field">
                     {{ form.reference.label_tag }} {{ form.reference }} {{ form.reference.errors }}
                 </div>
-                <div class="button-group">
-                    <button type="submit">Akten suchen</button>
-                    <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> 
-                </div>
             </div>
+            <div class="button-group">
+                <button type="submit">Akten suchen</button>
+                <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> 
+                {% if object_list.count %}
+                <span class="or">oder</span>
+                <a href="{% url 'task_archive' %}">Alle Aufgaben anzeigen</a>
+                {% endif %}
+                </div>
             {% else %}
             <div class="index-form-row">
                 <div class="index-form-field">
@@ -30,6 +38,9 @@
                 <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> 
                 <span class="or">oder</span>
                 <button formaction="{% url 'index' %}" formmethod="POST" type="submit">Aufgabe hinzufügen</button>
+                {% if object_list.all.count %}
+                <a href="{% url 'task_archive' %}">Alle Aufgaben anzeigen</a>
+                {% endif %}
             </div>
             {% endif %}            
         </form>
@@ -38,24 +49,39 @@
 {% endblock %}
 
 {% block main %}
-<h2>Laufende Aufgaben</h2>
-<table>
-    {% for task in object_list.pending %}
-    <tr>
-        <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
-        <td>{{ task.date }}</td>
-        <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
-        <td>{% render_timer task.timer %}</td>
-        {% empty %}
-        <tr>
-            <td colspan="4">Keine laufenden Aufgaben.</td>
-        </tr>
-        {% endfor %}
-</table>
-{% if object_list.count %}
-<p>
-    <a href="{% url 'task_archive' %}">Alle Aufgaben</a>
-</p>
+{% if object_list.pending.count %}
+<section class="current-task">
+        {% with task=object_list.pending.first %}
+        <h1>Aktuelle Aufgabe</h1>
+        <div class="row">
+            <div class="info-group">
+                <span class="label">Aktenzeichen:</span>
+                <span class="info"><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></span>
+            </div>
+            <div class="info-group">
+                <span class="label">Datum:</span> 
+                <span class="info">{{ task.date }}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="info-group">
+                <span class="info"><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></span>
+            </div>
+            <div>
+                <span style="font-style: italic;">
+                            {% if task.timer.status == 'paused' %}
+                            Timer ist angehalten.
+                            {% elif task.timer.status == 'running' %}
+                            Timer läuft.
+                            {% else %}
+                            Bitte starten Sie den Timer.
+                            {% endif %}
+            </span>
+            </div>
+            {% render_timer task.timer %}
+        </div>
+        {% endwith %}
+</section>
 {% endif %}
 {% endblock %} 
 
