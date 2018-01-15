@@ -123,6 +123,14 @@ button[type="submit"] {
     border: none;
 }    
 
+button.link {
+    padding: 0;
+    line-height: inherit;
+    color: #d50000;
+    background: unset;
+    border: none;
+}
+
 /* Form error lists */
 
 .errorlist {
@@ -193,6 +201,7 @@ td, th {
 .django-timer-display {
     padding: 4px 10px;
     border: 1px solid #ccc;
+    background: #fff;
 }
 
 .django-timer-buttons button {

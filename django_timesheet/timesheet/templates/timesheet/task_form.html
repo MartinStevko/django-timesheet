@@ -1,49 +1,56 @@
 {% extends 'timesheet/base.html' %}
 {% load timer static timesheet %}
 
-{% block main %}
-<h2>
-    <ol class="breadcrumbs">
-        <li>
-            <a href="{% url 'index' %}">Startseite</a>
-        </li>
-        {% if object.file %}
-        <li>
-            <a href="{% url 'file_list' %}">Akten</a>
-        </li>
-        <li>
-            <a href="{% url 'file' object.file.pk %}">{{ object.file.reference }}</a>
-        </li>
-        {% elif file %}
-        <li>
-            <a href="{% url 'file_list' %}">Akten</a>
-        </li>
-        <li>
-            <a href="{{ file.get_absolute_url }}">{{ file.reference }}</a>
-        </li>
-        {% else %}
-        <li>
-            <a href="{% url 'task_archive' %}">Aufgaben</a>
-        </li>
+{% block header %}
+<header>
+    <div class="container">
+        <h2>
+            <ol class="breadcrumbs">
+                <li>
+                    <a href="{% url 'index' %}">Startseite</a>
+                </li>
+                {% if object.file %}
+                <li>
+                    <a href="{% url 'file_list' %}">Akten</a>
+                </li>
+                <li>
+                    <a href="{% url 'file' object.file.pk %}">{{ object.file.reference }}</a>
+                </li>
+                {% elif file %}
+                <li>
+                    <a href="{% url 'file_list' %}">Akten</a>
+                </li>
+                <li>
+                    <a href="{{ file.get_absolute_url }}">{{ file.reference }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'task_archive' %}">Aufgaben</a>
+                </li>
+                {% endif %}
+                <li>
+                    Aufgabe
+                </li>
+            </ol>
+        </h2>
+        {% if object %}
+        {% render_timer object.timer %}
         {% endif %}
-        <li>
-            Aufgabe
-        </li>
-    </ol>
-</h2>
+    </div>
+</header>
+{% endblock %} 
+
+{% block main %}
 <form action="" method="POST">
     {% csrf_token %}
     {% render_form form %}
     <p>
         <button type="submit">Speichern</button>
         {% if object.pk %}
-        <button type="submit" formaction="{% url 'set_billable_time' object.pk %}">Abrechenbare Zeit von Timer übernehmen</button>
+        <button class="link" type="submit" formaction="{% url 'set_billable_time' object.pk %}">Abrechenbare Zeit von Timer übernehmen</button>
         {% endif %}
     </p>
 </form>
-{% if object %}
-{% render_timer object.timer %}
-{% endif %}
 {% endblock %}
 
 {% block scripts %}
