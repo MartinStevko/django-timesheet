@@ -5,6 +5,7 @@ from datetime import timedelta
 from django.db import models
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
 
 from django_timer.models import Timer
 
@@ -27,6 +28,9 @@ class TaskQueryset(models.QuerySet):
 
     def pending(self):
         return self.filter(timer__status__in=['', 'running', 'paused'])
+
+    def today(self):
+        return self.filter(date=now().date())
 
 class Task(models.Model):
 
