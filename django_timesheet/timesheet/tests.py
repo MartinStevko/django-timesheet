@@ -73,7 +73,14 @@ class TimesheetModels(TestCase):
         t.timer.start()
         t.timer.stop()
 
+        t = Task.objects.create()
+        t.timer.start()
+        t.timer.stop()
+        t.date = now().date() - datetime.timedelta(days=1)
+        t.save()
+
         self.assertEqual(Task.objects.pending().count(), 3)
+        self.assertEqual(Task.objects.today().count(), 4)
 
 class TaskFormTest(TestCase):
 
