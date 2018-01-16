@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.utils.timezone import now
 
-from django_timesheet.timesheet.models import File, Task
+from django_timesheet.timesheet.models import File, Task, Timer
 from django_timesheet.timesheet.forms import TaskForm
 
 # Create your tests here.
@@ -81,6 +81,33 @@ class TimesheetModels(TestCase):
 
         self.assertEqual(Task.objects.pending().count(), 3)
         self.assertEqual(Task.objects.today().count(), 4)
+
+    def test_delete_timer(self):
+
+        t = Task.objects.create()
+        t.timer.delete()
+
+        self.assertEqual(Timer.objects.count(), 0)
+        self.assertEqual(Task.objects.count(), 0)
+
+    def test_delete_task(self):
+
+        Task.objects.create()
+        t = Task.objects.create()
+        t.delete()
+
+        self.assertEqual(Task.objects.count(), 1)
+        self.assertEqual(Timer.objects.count(), 1)
+
+    def test_delete_file_and_task(self):
+
+        f = File.objects.create()
+        t = Task.objects.create(file=f)
+        f.delete()
+
+        self.assertEqual(File.objects.count(), 0)
+        self.assertEqual(Task.objects.count(), 0)
+        self.assertEqual(Timer.objects.count(), 0)
 
 class TaskFormTest(TestCase):
 

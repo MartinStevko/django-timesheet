@@ -6,6 +6,7 @@ from django.db import models
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
+from django.dispatch import receiver
 
 from django_timer.models import Timer
 
@@ -37,7 +38,7 @@ class Task(models.Model):
     file = models.ForeignKey(to=File, verbose_name=_('Akte'), blank=True, null=True)
     date = models.DateField(_('Datum'), auto_now_add=True)
     description = models.TextField(_('Beschreibung'))
-    timer = models.OneToOneField(to=Timer, null=True)
+    timer = models.OneToOneField(to=Timer, null=True, on_delete=models.CASCADE)
     billable = models.DurationField(_('Abrechenbare Zeit'), null=True, blank=True)
     min_billable_time = models.DurationField(_('kleinste Zeiteinheit'), default=timedelta(seconds=15*60))
 
@@ -60,3 +61,14 @@ class Task(models.Model):
         duration = ceil(self.timer.duration()/self.min_billable_time)*self.min_billable_time
         self.billable = duration
         self.save()
+
+@receiver(models.signals.post_delete)
+def delete_timer(sender, instance, **kwargs):
+    '''
+    Deletes associated timer, if task is deleted
+    '''
+    if sender == Task:
+        try:
+            instance.timer.delete()
+        except Timer.DoesNotExist:
+            pass
