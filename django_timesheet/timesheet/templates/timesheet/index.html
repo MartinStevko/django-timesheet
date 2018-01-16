@@ -83,6 +83,37 @@
         {% endwith %}
 </section>
 {% endif %}
+
+{% if object_list.today.count %}
+<section>
+    <h2>Heutige Aufgaben</h2>
+    <table>
+        <thead>
+            <th>Aktenzeichen</th>
+            <th>Beschreibung</th>
+            <th>Von</th>
+            <th>Bis</th>
+            <th>Timer</th>
+            <th>Abrechenbar</th>
+        </thead>
+        {% for task in object_list.today %}
+        <tr>
+            <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
+            <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
+            <td>{{ task.timer.segment_set.first.start_time }}</td>
+            <td>{{ task.timer.segment_set.last.stop_time | default:'' }}</td>
+            <td>{% if task.timer.status == 'running' %}läuft{% else %}{{ task.timer.duration | hhmmss }}{% endif %}</td>
+            <td>{{ task.billable | hhmmss }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5">Summe</td>
+            <td>{{ object_list.today.total_billable_time | hhmmss }}</td>
+        </tr>
+    </table>
+</section>
+
+{% endif %}
 {% endblock %} 
 
 {% block scripts %}
