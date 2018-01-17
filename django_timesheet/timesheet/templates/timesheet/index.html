@@ -10,21 +10,6 @@
     <div class="container">
         <form action="{% url 'file_list' %}" method="GET">
             {% csrf_token %}
-            {% if object_list.pending.count %}
-            <div class="index-form-row">
-                <div class="index-form-field">
-                    {{ form.reference.label_tag }} {{ form.reference }} {{ form.reference.errors }}
-                </div>
-            </div>
-            <div class="button-group">
-                <button type="submit">Akten suchen</button>
-                <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> 
-                {% if object_list.count %}
-                <span class="or">oder</span>
-                <a href="{% url 'task_archive' %}">Alle Aufgaben anzeigen</a>
-                {% endif %}
-                </div>
-            {% else %}
             <div class="index-form-row">
                 <div class="index-form-field">
                     {{ form.reference.label_tag }} {{ form.reference }} {{ form.reference.errors }}
@@ -42,17 +27,19 @@
                 <a href="{% url 'task_archive' %}">Alle Aufgaben anzeigen</a>
                 {% endif %}
             </div>
-            {% endif %}            
         </form>
     </div>
 </header>
 {% endblock %}
 
 {% block main %}
-{% if object_list.pending.count %}
+{% if object_list.pending.count > 1 %}
+<h1>Aktuelle Aufgaben</h1>
+{% elif object_list.pending.count == 1 %}
+<h1>Aktuelle Aufgabe</h1>
+{% endif %}
+{% for task in object_list.pending %}
 <section class="current-task">
-        {% with task=object_list.pending.first %}
-        <h1>Aktuelle Aufgabe</h1>
         <div class="row">
             <div class="info-group">
                 <span class="label">Aktenzeichen:</span>
@@ -80,9 +67,8 @@
             </div>
             {% render_timer task.timer %}
         </div>
-        {% endwith %}
 </section>
-{% endif %}
+{% endfor %}
 
 {% if object_list.today.count %}
 <section>
