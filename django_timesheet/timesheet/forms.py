@@ -80,7 +80,7 @@ class TaskForm(Form):
         label=File._meta.get_field('reference').verbose_name
     )
 
-    description = Task._meta.get_field('description').formfield(required=False)
+    description = CharField(required=False)
 
     def clean_description(self):
         data = self.cleaned_data['description']
