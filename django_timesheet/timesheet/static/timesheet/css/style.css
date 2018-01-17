@@ -10,6 +10,7 @@ body {
     font-size: 14px;
     line-height: 1.5;
     color: #333;
+    min-width: 500px;
 }
 
 /* Container, header and main */
@@ -269,6 +270,7 @@ td, th {
     display: flex;
     flex-flow: row wrap;
     margin: 0px -10px;
+    margin-bottom: 6px;
 }
 
 .index-form-field {
