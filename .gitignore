@@ -1,3 +1,4 @@
 *.pyc
 __pycache__
 *.sqlite3
+django_timesheet/settings/host.py
