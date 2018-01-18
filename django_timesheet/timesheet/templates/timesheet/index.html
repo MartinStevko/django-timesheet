@@ -19,14 +19,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="row">
-                    <div class="button-group cell">
+                <div class="cell">
+                    <div class="button-group">
                         <button formaction="{% url 'index' %}" formmethod="POST" type="submit">Neue Aufgabe</button>
                         <button formaction="{% url 'file_list' %}" formmethod="GET" type="submit">Akten suchen</button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="button-group cell">
+                <div class="cell">
+                    <div class="button-group">
                             {% if object_list.all.count %}
                             <a href="{% url 'task_archive' %}">Alle Aufgaben</a>
                             {% endif %}    

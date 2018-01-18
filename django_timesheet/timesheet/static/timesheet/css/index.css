@@ -105,4 +105,24 @@
     animation-iteration-count: infinite;
 }
 
-/* Table */
+/* Big screen */
+@media (min-width: 568px){
+    .index-form .row {
+        flex-flow: row nowrap;
+        align-items: baseline;
+    }
+
+    .index-form .cell:not(:last-child){
+        margin-right: 6px;
+    }
+
+    .current-task .cell.wide {
+        flex-basis: unset;
+    }
+
+    .current-task .cell.oneline {
+        align-self: flex-end;
+        justify-content: flex-start;
+    }
+
+}
