@@ -8,24 +8,31 @@
 {% block header %}
 <header>
     <div class="container">
-        <form action="{% url 'file_list' %}" method="GET">
+        <form class="index-form" action="{% url 'file_list' %}" method="GET">
             {% csrf_token %}
-            <div class="index-form-row">
-                <div class="index-form-field">
+            <div class="row">
+                <div class="cell">
                     {{ form.reference.label_tag }} {{ form.reference }} {{ form.reference.errors }}
                 </div>
-                <div class="index-form-field">
+                <div class="cell">
                     {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
                 </div>
             </div>
-            <div class="button-group">
-                <button type="submit">Akten suchen</button>
-                <a href="{% url 'file_list' %}">Alle Akten anzeigen</a> 
-                <span class="or">oder</span>
-                <button formaction="{% url 'index' %}" formmethod="POST" type="submit">Aufgabe hinzufügen</button>
-                {% if object_list.all.count %}
-                <a href="{% url 'task_archive' %}">Alle Aufgaben anzeigen</a>
-                {% endif %}
+            <div class="row">
+                <div class="row">
+                    <div class="button-group cell">
+                        <button formaction="{% url 'index' %}" formmethod="POST" type="submit">Neue Aufgabe</button>
+                        <button formaction="{% url 'file_list' %}" formmethod="GET" type="submit">Akten suchen</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="button-group cell">
+                            {% if object_list.all.count %}
+                            <a href="{% url 'task_archive' %}">Alle Aufgaben</a>
+                            {% endif %}    
+                            <a href="{% url 'file_list' %}">Alle Akten</a> 
+                    </div>
+                </div>
             </div>
         </form>
     </div>

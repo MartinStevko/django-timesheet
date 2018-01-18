@@ -1,16 +1,22 @@
-/* Index page */
+/* Index form */
 
-.index-form-row {
+.index-form .row {
     display: flex;
-    flex-flow: row wrap;
-    margin: 0px -10px;
+    flex-direction: column;
+}
+
+.index-form .cell {
+    flex-basis: 100%;
     margin-bottom: 6px;
 }
 
-.index-form-field {
+.index-form .row .or {
     flex: 1;
-    padding: 4px 10px;
+    font-style: italic;
+    text-align: center;
 }
+
+/* Current task */
 
 .current-task .row {
     display: flex;
