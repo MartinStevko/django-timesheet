@@ -1,3 +1,17 @@
+/* Index page */
+
+.index-form-row {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0px -10px;
+    margin-bottom: 6px;
+}
+
+.index-form-field {
+    flex: 1;
+    padding: 4px 10px;
+}
+
 .current-task .row {
     display: flex;
     flex-flow: row nowrap;
