@@ -48,21 +48,22 @@
 {% for task in object_list.pending %}
 <section class="current-task">
         <div class="row">
-            <div class="info-group">
+            <div class="cell">
                 <span class="label">Aktenzeichen:</span>
-                <span class="info"><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></span>
+                <div class="info"><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></div>
             </div>
-            <div class="info-group">
+            <div class="cell">
                 <span class="label">Datum:</span> 
-                <span class="info">{{ task.date }}</span>
+                <div class="info">{{ task.date }}</div>
             </div>
         </div>
         <div class="row">
-            <div class="info-group">
-                <span class="info"><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></span>
+            <div class="cell wide">
+                <span class="label">Beschreibung:</span> 
+                <div class="info"><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></div>
             </div>
-            <div>
-                <span style="font-style: italic;">
+            <div class="cell oneline">
+                <div class="ellipsify" style="font-style: italic;">
                             {% if task.timer.status == 'paused' %}
                             Timer ist angehalten.
                             {% elif task.timer.status == 'running' %}
@@ -70,9 +71,9 @@
                             {% else %}
                             Bitte starten Sie den Timer.
                             {% endif %}
-            </span>
+                </div>
+                {% render_timer task.timer %}
             </div>
-            {% render_timer task.timer %}
         </div>
 </section>
 {% endfor %}
@@ -80,30 +81,32 @@
 {% if object_list.today.count %}
 <section>
     <h2>Heutige Aufgaben</h2>
-    <table>
-        <thead>
-            <th>Aktenzeichen</th>
-            <th>Beschreibung</th>
-            <th>Von</th>
-            <th>Bis</th>
-            <th>Timer</th>
-            <th>Abrechenbar</th>
-        </thead>
-        {% for task in object_list.today %}
-        <tr>
-            <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
-            <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
-            <td>{{ task.timer.segment_set.first.start_time }}</td>
-            <td>{{ task.timer.segment_set.last.stop_time | default:'' }}</td>
-            <td>{% if task.timer.status == 'running' %}läuft{% else %}{{ task.timer.duration | hhmmss }}{% endif %}</td>
-            <td>{{ task.billable | hhmmss }}</td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <td colspan="5">Summe</td>
-            <td>{{ object_list.today.total_billable_time | hhmmss }}</td>
-        </tr>
-    </table>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <th>Aktenzeichen</th>
+                <th>Beschreibung</th>
+                <th>Von</th>
+                <th>Bis</th>
+                <th>Timer</th>
+                <th>Abrechenbar</th>
+            </thead>
+            {% for task in object_list.today %}
+            <tr>
+                <td><a href="{{ task.file.get_absolute_url }}">{{ task.file.reference }}</a></td>
+                <td><a href="{{ task.get_absolute_url }}">{{ task.description }}</a></td>
+                <td>{{ task.timer.segment_set.first.start_time }}</td>
+                <td>{{ task.timer.segment_set.last.stop_time | default:'' }}</td>
+                <td>{% if task.timer.status == 'running' %}läuft{% else %}{{ task.timer.duration | hhmmss }}{% endif %}</td>
+                <td>{{ task.billable | hhmmss }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="5">Summe</td>
+                <td>{{ object_list.today.total_billable_time | hhmmss }}</td>
+            </tr>
+        </table>
+    </div>
 </section>
 
 {% endif %}

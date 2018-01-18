@@ -135,6 +135,10 @@ button.link {
 
 /* Tables */
 
+.table-wrapper {
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
     border: 1px solid #ccc;

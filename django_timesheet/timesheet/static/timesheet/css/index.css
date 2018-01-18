@@ -20,19 +20,30 @@
 
 .current-task .row {
     display: flex;
-    flex-flow: row nowrap;
-    margin-bottom: 12px;
-    align-items: baseline;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-.current-task .info-group {
+.current-task .cell {
     flex: 1;
-    display: flex;
-    flex-flow: column nowrap;
+    margin-bottom: 6px;
+    overflow-x: hidden;
 }
 
-.current-task .row > *:not(:last-child) {
-    margin-right: 12px;
+.current-task .cell:not(:last-child) {
+    margin-right: 6px;
+}
+
+.current-task .cell.wide {
+    flex-basis: 100%;
+    flex-shrink: 0;
+}
+
+.current-task .cell.oneline {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+    justify-content: space-between;
 }
 
 .current-task .label {
@@ -41,10 +52,21 @@
 
 .current-task .info {
     padding: 8px 10px;
-    width: 100%;
     border: 1px solid #ccc;
     background: #fff;
 }
+
+.current-task .ellipsify {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.current-task .django-timer form {
+    flex-wrap: nowrap;
+}
+
+/* Timer display */
 
 .current-task .django-timer-display {
     padding: 8px 10px;
@@ -72,7 +94,7 @@
     }
     to {
         border-color: #337ab4;
-        box-shadow: 0 0 10px #337ab4;
+        box-shadow: 0 0 10px #337ab4 inset;
     }   
 }
 
@@ -82,3 +104,5 @@
     animation-direction: alternate;
     animation-iteration-count: infinite;
 }
+
+/* Table */
